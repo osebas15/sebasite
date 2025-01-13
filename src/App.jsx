@@ -1,23 +1,22 @@
 import logo from './logo.svg';
 import styles from './App.module.css';
+import images from './assets/imageConstants';
+import ColoredLine from './shared/components/ColoredLine';
 
 function App() {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
+        <img src={images.main_banner} class={styles.logo} alt="logo" />
         <p>
-          Edit <code>src/App.jsx</code> and save to reload.
+          Hi! I'm <b>Sebastian Aguirre</b>, <br/> 
+          I have <b>10+ years experience</b> engineering and managing projects<br/>
+          across a wide variety of stacks. I'm experienced in <br/>
+          <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
       </header>
+      
+      <ColoredLine color='red'/>
     </div>
   );
 }
