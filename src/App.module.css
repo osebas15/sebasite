@@ -1,26 +1,37 @@
 .App {
   text-align: center;
-  background-color: #282c34;
-  color: #282c34;
 }
 
-.logo {
-  height: 40vmin;
-  pointer-events: none;
+.banner {
+  display: flex;
+  flex-direction: row;
 }
 
 .header {
-  background-color: #ebd2a8b2;
+  background-color: #9e8f72;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: white
 }
 
 .link {
   color: #b318f0;
+}
+
+.my_pic {
+  height: 20vmax;
+  pointer-events: none;
+}
+
+.socials {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  margin-left: 40px;
 }
 
 @keyframes logo-spin {
