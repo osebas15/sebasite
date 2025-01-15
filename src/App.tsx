@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import styles from './App.module.css';
 import images from './assets/imageConstants';
 import ColoredLine from './shared/components/ColoredLine';
+import LogoLink from './shared/components/LogoLink';
 
 function App() {
   return (
@@ -10,9 +11,7 @@ function App() {
         <div class={styles.banner}>
           <img src={images.my_pic} class={styles.my_pic} alt="logo" />
           <div class={styles.socials}>
-            <a href="https://github.com/your-github-username" target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
+            <LogoLink text="osebas15" link={new URL("http://www.google.com")}/>
             <a href="https://linkedin.com/in/your-linkedin-profile" target="_blank" rel="noopener noreferrer">
               LinkedIn
             </a>
