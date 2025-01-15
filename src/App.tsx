@@ -3,6 +3,7 @@ import styles from './App.module.css';
 import images from './assets/imageConstants';
 import ColoredLine from './shared/components/ColoredLine';
 import LogoLink from './shared/components/LogoLink';
+import QRGenerator from './shared/components/QRCodeCreator';
 
 function App() {
   return (
@@ -17,13 +18,14 @@ function App() {
         </div>
         <p>
           Hi! I'm <b>Sebastian Aguirre</b>, <br/> 
-          I have <b>10+ years experience</b> engineering and managing projects<br/>
-          across a wide variety of stacks. I'm experienced in <br/>
+          I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. I'm experienced in <br/>
           <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
-      
       <ColoredLine backgroundColor='black' height='40px' text='Quick Tools' textColor='white'/>
+      <div class={styles.quicktools}>
+        Under construction
+      </div>
     </div>
   );
 }

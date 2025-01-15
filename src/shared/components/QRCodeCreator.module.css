@@ -1,0 +1,8 @@
+.QRCodeCreator {
+    display: flex;
+    flex-direction: column;
+}
+
+.QRCodeCreator h1 {
+    font-size: small
+}

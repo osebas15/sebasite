@@ -18,6 +18,11 @@
   color: white
 }
 
+.header p {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
 .logolink {
   display: flex;
   flex-direction: row;
@@ -35,6 +40,11 @@
 .my_pic {
   height: 20vmax;
   pointer-events: none;
+}
+
+.quicktools {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .socials {
