@@ -24,7 +24,7 @@ function App() {
       </header>
       <ColoredLine backgroundColor='black' height='40px' text='Quick Tools' textColor='white'/>
       <div class={styles.quicktools}>
-        Under construction
+        <QRGenerator/>
       </div>
     </div>
   );
