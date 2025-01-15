@@ -2,24 +2,20 @@ import {
     Component
 } from 'solid-js'
 
+import styles from '../../App.module.css';
+
 interface LogoLinkProps {
     text: string
     link: URL
+    imgSrc: string
 }
 
-const LogoLink: Component<LogoLinkProps> = (props) => {
-    let {
-        text,
-        link
-    } = props
+const LogoLink: Component<LogoLinkProps> = ({text, link, imgSrc}) => {
 
     return (
-        <a href={link.href} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-        <img
-            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-            alt="GitHub Logo"
-        />
-            {props.text}
+        <a href={link.href} target="_blank" rel="noopener noreferrer" class={styles.logolink}>
+            <img src={imgSrc}/>
+            {text}
         </a>
     )
 }
