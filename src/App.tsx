@@ -23,7 +23,7 @@ function App() {
         </p>
       </header>
       
-      <ColoredLine color='red'/>
+      <ColoredLine backgroundColor='black' height='40px' text='Quick Tools' textColor='white'/>
     </div>
   );
 }
