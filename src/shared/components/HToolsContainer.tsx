@@ -23,7 +23,7 @@ const HToolsContainer: Component<HToolsContainer> = ({containers}) => {
             { (toolContainer) => 
                 <div>
                     {toolContainer.title}
-                    {toolContainer.tool()}                
+                    {toolContainer.tool()}      
                 </div>
             }
             </For>

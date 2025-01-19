@@ -1,10 +1,10 @@
 import { Component, createEffect } from 'solid-js';
-import { supabase } from './backend/supabase';
+import { supabase } from '../backend/supabase';
 import { createSignal, createResource } from 'solid-js';
 import { createStore } from 'solid-js/store'
 
 interface ShareListProps {
-    list_id: string
+    list_id?: string
 }
 
 type Todo = {
@@ -21,7 +21,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         const { data, error } = await supabase
             .from<Todo>('todos')
             .select()
-            .eq('list_id', list_id)
+            .eq('list_id', list_id ?? "empty")
 
         if (error) {
             console.error(error)
@@ -34,8 +34,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     let [upstreamTodos, {mutate, refetch}] = createResource(loadTodos)
 
     let [todos, setTodos] = createStore<Todo[]>([])
-    // get all of the items that match this list
-    // get it from orig APP, from supabase
+    
     createEffect(() => {
         const newTodos = upstreamTodos()
         if (newTodos) {

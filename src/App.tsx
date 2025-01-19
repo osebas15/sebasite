@@ -7,8 +7,8 @@ import QRGenerator from './shared/components/QRCodeCreator';
 
 import Home from './Home';
 import { Component } from 'solid-js';
-import { Router, Route } from "https://esm.sh/@solidjs/router";
-import ShareList from './ShareList';
+import { Router, Route } from "@solidjs/router";
+import ShareList from './sharelist/ShareList';
 
 const App: Component = () => {
   return (
