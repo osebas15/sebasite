@@ -5,11 +5,25 @@ import ColoredLine from './shared/components/ColoredLine';
 import LogoLink from './shared/components/LogoLink';
 import QRGenerator from './shared/components/QRCodeCreator';
 import HToolsContainer from './shared/components/HToolsContainer';
+import { useNavigate } from "@solidjs/router";
+import { v4 } from 'uuid';
 
 const Home = () => {
+  const navigate = useNavigate()
+
   const qrCodeContainer = {
-    title: "Create a QR Code",
+    title: "QRCode Generator",
     tool: () => <QRGenerator/>,
+    color: 'black'
+  }
+
+  const shareListCreatorContainer = {
+    title: "Create a Todo List to share",
+    tool: () => {
+      <>
+        <button type="button"></button>
+      </>
+    },
     color: 'black'
   }
 
