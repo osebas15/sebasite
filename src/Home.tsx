@@ -1,29 +1,24 @@
-import logo from './logo.svg';
 import styles from './App.module.css';
 import images from './assets/imageConstants';
-import ColoredLine from './shared/components/ColoredLine';
 import LogoLink from './shared/components/LogoLink';
 import QRGenerator from './shared/components/QRCodeCreator';
-import HToolsContainer from './shared/components/HToolsContainer';
+import { HToolsContainer, ToolContainer } from './shared/components/HToolsContainer';
 import { useNavigate } from "@solidjs/router";
-import { v4 } from 'uuid';
+import ShareListCreator from './shared/components/ShareListCreator';
+
 
 const Home = () => {
   const navigate = useNavigate()
 
-  const qrCodeContainer = {
+  const qrCodeContainer: ToolContainer = {
     title: "QRCode Generator",
     tool: () => <QRGenerator/>,
     color: 'black'
   }
 
-  const shareListCreatorContainer = {
+  const shareListCreatorContainer: ToolContainer = {
     title: "Create a Todo List to share",
-    tool: () => {
-      <>
-        <button type="button"></button>
-      </>
-    },
+    tool: () => <ShareListCreator/>,
     color: 'black'
   }
 
@@ -43,7 +38,7 @@ const Home = () => {
           <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
-      <HToolsContainer containers={[qrCodeContainer]}/>
+      <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]}/>
     </div>
   );
 }

@@ -13,7 +13,7 @@ interface ToolContainer {
 }
 
 interface HToolsContainer {
-    containers: [ToolContainer]
+    containers: ToolContainer[]
 }
 
 const HToolsContainer: Component<HToolsContainer> = ({containers}) => {
@@ -31,4 +31,7 @@ const HToolsContainer: Component<HToolsContainer> = ({containers}) => {
     )
 }
 
-export default HToolsContainer
+export {
+    HToolsContainer,
+    type ToolContainer
+}
