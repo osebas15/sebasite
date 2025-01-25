@@ -73,6 +73,20 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
 
     return (
         <div>
+            <input
+                class="border-4"
+                type="text"
+                name="todo"
+                value={inputTodo()}
+                onInput={(e) => setInputTodo(e.target.value)}
+            />
+            <button onClick={() => todoActions('CREATE', [{
+                task: inputTodo(),
+                is_complete: false,
+                list_id: list_id ?? 'error'
+            }])}>
+                New todo
+            </button>
             <For each={todos}>
                 {(todo) => <TodoCell todo={todo} action={todoActions}/>}
             </For>
