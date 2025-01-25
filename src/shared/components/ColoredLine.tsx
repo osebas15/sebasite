@@ -5,7 +5,7 @@ import {
 interface ColoredLineProps { 
     height?: string,
     backgroundColor?: string,
-    text?: string,
+    text?: [string],
     textColor?: string,
 }
 

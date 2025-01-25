@@ -1,19 +1,12 @@
-import { Component, createEffect } from 'solid-js';
+import { Component, createEffect, For } from 'solid-js';
 import { supabase } from '../backend/supabase';
 import { createSignal, createResource } from 'solid-js';
-import { createStore } from 'solid-js/store'
+import { createStore } from 'solid-js/store';
+import { Todo, TodoCell } from './TodoCell';
 
 interface ShareListProps {
     list_id?: string
 }
-
-type Todo = {
-    id: number
-    task: string
-    is_complete: boolean
-    inserted_at: string
-    list_id: string
-  }
 
 const ShareList: Component<ShareListProps> = ({list_id}) => {
 
@@ -21,7 +14,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         const { data, error } = await supabase
             .from<Todo>('todos')
             .select()
-            .eq('list_id', list_id ?? "empty")
+            .eq('list_id', list_id ?? 'empty')
 
         if (error) {
             console.error(error)
@@ -42,7 +35,14 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         }
     })
 
-    return <p>{list_id}: {todos.length}</p>;
+    return (
+        <div>
+            {todos.length}
+            <For each={todos}>
+                {(todo) => <TodoCell todo={todo}/>}
+            </For>
+        </div>
+    )
 };
 
 export default ShareList
