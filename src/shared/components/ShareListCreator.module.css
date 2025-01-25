@@ -1,0 +1,22 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;    /* Center content horizontally */
+    height: fill;          /* Full height container if necessary */
+}
+
+.centeredButton {
+    font-size: 14px;      /* Reduce font size */
+    padding: 8px 12px;    /* Adjust padding for smaller size */
+    border-radius: 4px;   /* Add rounded corners */
+    border: 1px solid #000; /* Add a thin border */
+    background-color: #f0f0f0; /* Light background color */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth hover effects */
+}
+
+.centeredButton:hover {
+    background-color: #e0e0e0; /* Slightly darker background on hover */
+    transform: scale(1.05);    /* Slight zoom effect on hover */
+}

@@ -6,6 +6,8 @@ import {
     useNavigate
 } from '@solidjs/router'
 
+import styles from './ShareListCreator.module.css';
+
 import { v4 } from 'uuid';
 
 const ShareListCreator: Component = () => {
@@ -16,8 +18,8 @@ const ShareListCreator: Component = () => {
     }
 
     return (
-        <a>
-            <button type="button" onClick={handleClick}>
+        <a class={styles.mainContainer}>
+            <button type="button" class={styles.centeredButton} onClick={handleClick}>
                 your list
             </button>
         </a>

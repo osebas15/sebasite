@@ -42,6 +42,10 @@
   pointer-events: none;
 }
 
+.nav_main {
+  display: flex;
+}
+
 .quicktools {
   display: flex;
   flex-wrap: wrap;

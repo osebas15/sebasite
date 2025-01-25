@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@solid-primitives/presence':
+        specifier: ^0.1.0
+        version: 0.1.0(solid-js@1.9.3)
       '@solidjs/router':
         specifier: ^0.15.3
         version: 0.15.3(solid-js@1.9.3)
@@ -362,6 +365,16 @@ packages:
     resolution: {integrity: sha512-3j4jx1TppORdTAoBJRd+/wJRGCPC0ETWkXOecJ6PPZLj6SptXkrXcNqdj0oclbKML6FkQltdz7bBA3rUSirZug==}
     cpu: [x64]
     os: [win32]
+
+  '@solid-primitives/presence@0.1.0':
+    resolution: {integrity: sha512-eWSQ67GA4DYrgoGeSKYdnkDaMVzJGCLCmhl3+0Lm1iY0U5onr32lxiu1HrQAvCikmI5nJhNEOQtnM39lB7Is+A==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
+  '@solid-primitives/utils@6.3.0':
+    resolution: {integrity: sha512-e7hTlJ1Ywh2+g/Qug+n4L1mpfxsikoIS4/sHE2EK9WatQt8UJqop/vE6bsLnXlU1xuhb/jo94Ah5Y27rd4wP7A==}
+    peerDependencies:
+      solid-js: ^1.6.12
 
   '@solidjs/router@0.15.3':
     resolution: {integrity: sha512-iEbW8UKok2Oio7o6Y4VTzLj+KFCmQPGEpm1fS3xixwFBdclFVBvaQVeibl1jys4cujfAK5Kn6+uG2uBm3lxOMw==}
@@ -966,6 +979,15 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.27.4':
     optional: true
+
+  '@solid-primitives/presence@0.1.0(solid-js@1.9.3)':
+    dependencies:
+      '@solid-primitives/utils': 6.3.0(solid-js@1.9.3)
+      solid-js: 1.9.3
+
+  '@solid-primitives/utils@6.3.0(solid-js@1.9.3)':
+    dependencies:
+      solid-js: 1.9.3
 
   '@solidjs/router@0.15.3(solid-js@1.9.3)':
     dependencies:
