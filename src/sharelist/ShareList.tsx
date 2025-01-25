@@ -1,6 +1,14 @@
-import { Component, createEffect, For } from 'solid-js';
+import { 
+    Component, 
+    createEffect, 
+    For, 
+    createSignal, 
+    createResource,
+    onMount 
+} from 'solid-js';
+
+import { RealtimeSubscription } from '@supabase/supabase-js'
 import { supabase } from '../backend/supabase';
-import { createSignal, createResource } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { Todo, TodoAction, TodoCell, TodoVerb } from './TodoCell';
 
@@ -12,7 +20,7 @@ const createLoadTodos = (list_id?: string) => (async () => {
     const { data, error } = await supabase
         .from<Todo>('todos')
         .select()
-        .eq('list_id', list_id ?? 'empty')
+        .eq('list_id', list_id)
 
     if (error) {
         console.error(error)
@@ -27,6 +35,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     let [upstreamTodos, {mutate, refetch}] = createResource(createLoadTodos(list_id))
     let [todos, setTodos] = createStore<Todo[]>([])
     let [inputTodo, setInputTodo] = createSignal<string>('')
+
+    let subscription: RealtimeSubscription | null
     
     createEffect(() => {
         const newTodos = upstreamTodos()
@@ -34,6 +44,35 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
           setTodos(newTodos)
         }
     })
+
+    onMount(() => {
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            createTodo({
+                task: inputTodo(),
+                is_complete: false,
+                list_id: list_id ?? 'error'
+            })
+          }
+        })
+    
+        subscription = supabase
+          .from<Todo>('todos')
+          .on('*', (payload) => {
+            switch (payload.eventType) {
+              case 'INSERT':
+                setTodos((prev) => [...prev, payload.new])
+                break
+              case 'UPDATE':
+                setTodos((item) => item.id === payload.new.id, payload.new)
+                break
+              case 'DELETE':
+                setTodos((prev) => prev.filter((item) => item.id != payload.old.id))
+                break
+            }
+          })
+          .subscribe()
+      })
 
     async function completeTodo(id: number) {
         const { error } = await supabase
@@ -48,10 +87,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     }
 
     async function createTodo(newTodo: Todo){
-        const { data, error } = await supabase.from<Todo>('todos').insert({
-            task: newTodo.task,
-            is_complete: false,
-          })
+        const { data, error } = await supabase.from<Todo>('todos').insert(newTodo)
           if (error) {
             console.error(error)
           }
