@@ -2,31 +2,31 @@ import { Component, createEffect, For } from 'solid-js';
 import { supabase } from '../backend/supabase';
 import { createSignal, createResource } from 'solid-js';
 import { createStore } from 'solid-js/store';
-import { Todo, TodoCell } from './TodoCell';
+import { Todo, TodoAction, TodoCell, TodoVerb } from './TodoCell';
 
 interface ShareListProps {
     list_id?: string
 }
 
-const ShareList: Component<ShareListProps> = ({list_id}) => {
+const createLoadTodos = (list_id?: string) => (async () => {
+    const { data, error } = await supabase
+        .from<Todo>('todos')
+        .select()
+        .eq('list_id', list_id ?? 'empty')
 
-    const loadTodos = async () => {
-        const { data, error } = await supabase
-            .from<Todo>('todos')
-            .select()
-            .eq('list_id', list_id ?? 'empty')
-
-        if (error) {
-            console.error(error)
-            throw error
-        }
-    
-        return data
+    if (error) {
+        console.error(error)
+        throw error
     }
 
-    let [upstreamTodos, {mutate, refetch}] = createResource(loadTodos)
+    return data
+})
 
+const ShareList: Component<ShareListProps> = ({list_id}) => {
+
+    let [upstreamTodos, {mutate, refetch}] = createResource(createLoadTodos(list_id))
     let [todos, setTodos] = createStore<Todo[]>([])
+    let [inputTodo, setInputTodo] = createSignal<string>('')
     
     createEffect(() => {
         const newTodos = upstreamTodos()
@@ -35,11 +35,46 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         }
     })
 
+    async function completeTodo(id: number) {
+        const { error } = await supabase
+          .from<Todo>('todos')
+          .update({
+            is_complete: true
+          })
+          .eq('id', id)
+        if (error) {
+          console.error(error)
+        }
+    }
+
+    async function createTodo(newTodo: Todo){
+        const { data, error } = await supabase.from<Todo>('todos').insert({
+            task: newTodo.task,
+            is_complete: false,
+          })
+          if (error) {
+            console.error(error)
+          }
+          setInputTodo('')
+    }
+
+    async function todoActions(verb: TodoVerb, updatedTodos: Todo[]){
+        switch (verb) {
+            case 'COMPLETE':
+                updatedTodos.forEach((todo) => completeTodo(todo.id!))
+                break
+            case 'CREATE':
+                updatedTodos.forEach((todo) => createTodo(todo))
+                break
+            default :
+                console.error(`unimplemented switch case ${verb}`)
+        }
+    }
+
     return (
         <div>
-            {todos.length}
             <For each={todos}>
-                {(todo) => <TodoCell todo={todo}/>}
+                {(todo) => <TodoCell todo={todo} action={todoActions}/>}
             </For>
         </div>
     )
