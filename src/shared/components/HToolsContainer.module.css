@@ -2,4 +2,20 @@
 .h_tools_container {
     display: flex;
     flex-direction: row;
+    background-color:darkslategrey;
+}
+
+.title_tool_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: bisque;
+}
+
+.tool_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
 }

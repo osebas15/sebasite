@@ -22,9 +22,11 @@ const HToolsContainer: Component<HToolsContainer> = ({containers, height}) => {
         <div class={styles.h_tools_container}>
             <For each={containers} fallback={<a>error</a>}>
             { (toolContainer) => 
-                <div style={{height: height}}>
+                <div class={styles.title_tool_container} style={{height: height}}>
                     {toolContainer.title}
-                    {toolContainer.tool()}      
+                    <div class={styles.tool_container}>
+                        {toolContainer.tool()}      
+                    </div>
                 </div>
             }
             </For>

@@ -38,7 +38,7 @@ const Home = () => {
           <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
-      <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]}/>
+      <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]} height='160px'/>
     </div>
   );
 }
