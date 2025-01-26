@@ -5,9 +5,10 @@ import QRGenerator from './shared/components/QRCodeCreator';
 import { HToolsContainer, ToolContainer } from './shared/components/HToolsContainer';
 import { useNavigate } from "@solidjs/router";
 import ShareListCreator from './shared/components/ShareListCreator';
+import { Component } from 'solid-js';
+import AboutMe from './AboutMe';
 
-
-const Home = () => {
+const Home: Component = () => {
   const navigate = useNavigate()
 
   const qrCodeContainer: ToolContainer = {
@@ -25,20 +26,14 @@ const Home = () => {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <div class={styles.banner}>
-          <img src={images.my_pic} class={styles.my_pic} alt="logo" />
-          <div class={styles.socials}>
-            <LogoLink text="osebas15" link={new URL("https://github.com/osebas15")} imgSrc="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"/>
-            <LogoLink text="Sebastian Aguirre" link={new URL("https://www.linkedin.com/in/sebastian-aguirre-52ba93aa/")} imgSrc="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"/>
-          </div>
-        </div>
+        
         <p>
           Hi! I'm <b>Sebastian Aguirre</b>, <br/> 
-          I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. I'm experienced in <br/>
-          <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
+          I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. <br/> I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
       <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]} height='160px'/>
+      {/*<AboutMe/>*/}
     </div>
   );
 }
