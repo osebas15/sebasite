@@ -90,11 +90,21 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     }
 
     async function createTodo(newTodo: Todo){
-        const { data, error } = await supabase.from<Todo>('todos').insert(newTodo)
-          if (error) {
-            console.error(error)
-          }
-          setInputTodo('')
+      const { data, error } = await supabase.from<Todo>('todos').insert(newTodo)
+      if (error) {
+        console.error(error)
+      }
+      setInputTodo('')
+    }
+
+    async function deleteTodo(todo: Todo) {
+      const { error } = await supabase
+        .from<Todo>('todos')
+        .delete()
+        .eq('id', todo.id)
+      if (error) {
+        console.error(error)
+      }
     }
 
     async function todoActions(verb: TodoVerb, updatedTodos: Todo[]){
@@ -105,6 +115,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
             case 'CREATE':
                 updatedTodos.forEach((todo) => createTodo(todo))
                 break
+            case 'DELETE':
+                updatedTodos.forEach((todo) => deleteTodo(todo))
             default :
                 console.error(`unimplemented switch case ${verb}`)
         }
