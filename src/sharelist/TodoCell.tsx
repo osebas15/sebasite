@@ -55,12 +55,14 @@ const TodoCell: Component<TodoCellProps> = ({todo, action}) => {
     return (
         <div class={style.main}>
             <b>{todo.task}</b>
-            <button onClick={() => { action('COMPLETE', [todo]) }}>
-                {todo.is_complete ? svgChecked() : svgUnchecked()}
-            </button>
-            <button onClick={() => { action('DELETE', [todo]) }}>
-                X
-            </button>
+            <div class={style.button_container}>
+                <button onClick={() => { action('COMPLETE', [todo]) }}>
+                    {todo.is_complete ? svgChecked() : svgUnchecked()}
+                </button>
+                <button onClick={() => { action('DELETE', [todo]) }}>
+                    X
+                </button>
+            </div>
         </div>
     )
 }

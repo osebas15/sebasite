@@ -35,6 +35,15 @@ const Home: Component<HomeProps> = ({list_id}) => {
     color: 'black'
   }
 
+  let containers: () => ToolContainer[] = () => {
+    if (list_id){
+      return [shareListCreatorContainer, qrCodeContainer]
+    }
+    else {
+      return [qrCodeContainer, shareListCreatorContainer]
+    }
+  }
+
   return (
     <div class={styles.App}>
       <header class={styles.header}>
@@ -44,7 +53,7 @@ const Home: Component<HomeProps> = ({list_id}) => {
           I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
-      <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]} minHeight='320px'/>
+      <HToolsContainer containers={containers()} minHeight='320px'/>
       {/*<AboutMe/>*/}
     </div>
   );
