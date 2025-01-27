@@ -32,7 +32,7 @@ const Home: Component = () => {
           I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
-      <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]} height='160px'/>
+      <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]} height='320px'/>
       {/*<AboutMe/>*/}
     </div>
   );
