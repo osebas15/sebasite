@@ -17,9 +17,11 @@ const App: Component = () => {
         <Route path="/" component={Home} />
         <Route
           path="/sharelist/:list_id"
-          component={({params}) => <ShareList list_id={params.list_id} />}
+          component={({params}) => <ShareList list_id={params.list_id}/>}
         />
       </Router>
+      <div class={styles.bottomBar}>
+      </div>
     </div>
   );
 };
