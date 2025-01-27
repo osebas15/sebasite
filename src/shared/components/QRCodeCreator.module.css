@@ -6,3 +6,18 @@
 .QRCodeCreator h1 {
     font-size: small
 }
+
+.QRCodeWrapper {
+    display: inline-block; /* Ensures the container only wraps the image */
+    border: 2px solid black; /* Change color and size as needed */
+    border-radius: 8px; /* Optional: Rounded corners */
+    padding: 10px; /* Optional: Adds space between the image and the border */
+    background-color: white; /* Optional: Background for better visibility */
+    margin-top: 20px;
+}
+
+.QRCodeWrapper img {
+    display: block; /* Prevents extra space caused by inline images */
+    max-width: 100%; /* Ensures image stays responsive */
+    height: auto; /* Maintain aspect ratio */
+}

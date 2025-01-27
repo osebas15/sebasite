@@ -13,7 +13,7 @@ const Home: Component = () => {
 
   const qrCodeContainer: ToolContainer = {
     title: "QRCode Generator",
-    tool: () => <QRGenerator/>,
+    tool: () => <QRGenerator placeholder={'https://sebasite.netlify.app/'}/>,
     color: 'black'
   }
 
