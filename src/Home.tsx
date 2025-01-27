@@ -26,10 +26,10 @@ const Home: Component = () => {
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        
         <p>
           Hi! I'm <b>Sebastian Aguirre</b>, <br/> 
-          I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. <br/> I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
+          I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. <br/> 
+          I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
       </header>
       <HToolsContainer containers={[qrCodeContainer, shareListCreatorContainer]} height='160px'/>

@@ -10,7 +10,10 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    background-color: bisque;
+    background-color:aliceblue;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding: 20px;
 }
 
 .tool_container {
