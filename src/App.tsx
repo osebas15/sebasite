@@ -14,10 +14,10 @@ const App: Component = () => {
   return (
     <div class={styles.nav_main}>
       <Router>
-        <Route path="/" component={Home} />
+        <Route path="/" component={() => <Home/>} />
         <Route
           path="/sharelist/:list_id"
-          component={({params}) => <ShareList list_id={params.list_id}/>}
+          component={({params}) => <Home list_id={params.list_id}/>}
         />
       </Router>
       <div class={styles.bottomBar}>

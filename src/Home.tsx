@@ -7,8 +7,13 @@ import { useNavigate } from "@solidjs/router";
 import ShareListCreator from './shared/components/ShareListCreator';
 import { Component } from 'solid-js';
 import AboutMe from './AboutMe';
+import ShareList from './sharelist/ShareList';
 
-const Home: Component = () => {
+interface HomeProps {
+  list_id?: string
+}
+
+const Home: Component<HomeProps> = ({list_id}) => {
   const navigate = useNavigate()
 
   const qrCodeContainer: ToolContainer = {
@@ -19,7 +24,14 @@ const Home: Component = () => {
 
   const shareListCreatorContainer: ToolContainer = {
     title: "Create a Todo List to share",
-    tool: () => <ShareListCreator/>,
+    tool: () => {
+      if (list_id){
+        return <ShareList list_id={list_id}/>
+      }
+      else {
+        return <ShareListCreator/>
+      }
+    },
     color: 'black'
   }
 
