@@ -14,15 +14,15 @@ interface ToolContainer {
 
 interface HToolsContainer {
     containers: ToolContainer[]
-    height: string
+    minHeight: string
 }
 
-const HToolsContainer: Component<HToolsContainer> = ({containers, height}) => {
+const HToolsContainer: Component<HToolsContainer> = ({containers, minHeight}) => {
     return (
         <div class={styles.h_tools_container}>
             <For each={containers} fallback={<a>error</a>}>
             { (toolContainer) => 
-                <div class={styles.title_tool_container} style={{height: height}}>
+                <div class={styles.title_tool_container} style={{height: minHeight}}>
                     {toolContainer.title}
                     <div class={styles.tool_container}>
                         {toolContainer.tool()}      
