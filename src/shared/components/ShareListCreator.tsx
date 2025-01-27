@@ -20,7 +20,7 @@ const ShareListCreator: Component = () => {
     return (
         <a class={styles.mainContainer}>
             <button type="button" class={styles.centeredButton} onClick={handleClick}>
-                your list
+                add to List
             </button>
         </a>
     )

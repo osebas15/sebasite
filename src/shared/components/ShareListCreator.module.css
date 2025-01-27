@@ -1,12 +1,12 @@
 .mainContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
+    justify-content: flex-start; /* Center content vertically */
     align-items: center;    /* Center content horizontally */
     height: fill;          /* Full height container if necessary */
 }
 
-.centeredButton {
+.button {
     font-size: 14px;      /* Reduce font size */
     padding: 8px 12px;    /* Adjust padding for smaller size */
     border-radius: 4px;   /* Add rounded corners */

@@ -10,7 +10,10 @@ import {
 import { RealtimeSubscription } from '@supabase/supabase-js'
 import { supabase } from '../backend/supabase';
 import { createStore } from 'solid-js/store';
+
+import styles from './ShareList.module.css'
 import { Todo, TodoAction, TodoCell, TodoVerb } from './TodoCell';
+
 
 interface ShareListProps {
     list_id?: string
@@ -108,9 +111,9 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     }
 
     return (
-        <div>
+        <div class={styles.main}>
+          <div class={styles.inputContainer}>
             <input
-                class="border-4"
                 type="text"
                 name="todo"
                 value={inputTodo()}
@@ -123,9 +126,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
             }])}>
                 New todo
             </button>
-            <For each={todos}>
-                {(todo) => <TodoCell todo={todo} action={todoActions}/>}
-            </For>
+          </div>
+          <For each={todos}>
+              {(todo) => <TodoCell todo={todo} action={todoActions}/>}
+          </For>
         </div>
     )
 };
