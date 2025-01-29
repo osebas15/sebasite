@@ -13,6 +13,7 @@ import { createStore } from 'solid-js/store';
 
 import styles from './ShareList.module.css'
 import { Todo, TodoAction, TodoCell, TodoVerb } from './TodoCell';
+import CopyToClipboard from '../shared/components/CopyToClipboard';
 
 
 interface ShareListProps {
@@ -124,6 +125,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
 
     return (
         <div class={styles.main}>
+          <a>Share this link to share your list!</a>
+          <CopyToClipboard text={window.location.href}/> 
           <div class={styles.inputContainer}>
             <input
                 type="text"
