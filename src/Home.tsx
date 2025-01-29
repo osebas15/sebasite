@@ -23,7 +23,7 @@ const Home: Component<HomeProps> = ({list_id}) => {
   }
 
   const shareListCreatorContainer: ToolContainer = {
-    title: "Create a Todo List to share",
+    title: "Share your todo list",
     tool: () => {
       if (list_id){
         return <ShareList list_id={list_id}/>

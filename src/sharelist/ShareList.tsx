@@ -139,7 +139,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     return (
         <div class={styles.main}>
           <a>Share this link to share your list!</a>
-          <CopyToClipboard text={shareUrl()}/> 
+          <CopyToClipboard text={`${window.location.origin}${location.pathname}`}/> 
           <div class={styles.inputContainer}>
             <input
                 type="text"
