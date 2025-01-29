@@ -4,8 +4,12 @@ import {
     For, 
     createSignal, 
     createResource,
-    onMount 
+    onMount
 } from 'solid-js';
+
+import {
+  useLocation
+} from '@solidjs/router'
 
 import { RealtimeSubscription } from '@supabase/supabase-js'
 import { supabase } from '../backend/supabase';
@@ -39,14 +43,23 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     let [upstreamTodos, {mutate, refetch}] = createResource(createLoadTodos(list_id))
     let [todos, setTodos] = createStore<Todo[]>([])
     let [inputTodo, setInputTodo] = createSignal<string>('')
+    let [shareUrl, setShareUrl] = createSignal<string>('')
 
     let subscription: RealtimeSubscription | null
+
+    let location = useLocation()
     
     createEffect(() => {
-        const newTodos = upstreamTodos()
-        if (newTodos) {
-          setTodos(newTodos)
-        }
+      const newShareUrl = `${window.location.origin}${location.pathname}`
+      if (newShareUrl) {
+        setShareUrl(newShareUrl)
+      }
+
+      const newTodos = upstreamTodos()
+      if (newTodos) {
+        setTodos(newTodos)
+      }
+      console.log("Updated share URL:", shareUrl()); // This will always log the latest value
     })
 
     onMount(() => {
@@ -61,7 +74,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         })
     
         subscription = supabase
-          .from<Todo>('todos')
+          .from<Todo>(`todos:list_id=eq.${list_id}`)
           .on('*', (payload) => {
             switch (payload.eventType) {
               case 'INSERT':
@@ -126,7 +139,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     return (
         <div class={styles.main}>
           <a>Share this link to share your list!</a>
-          <CopyToClipboard text={window.location.href}/> 
+          <CopyToClipboard text={shareUrl()}/> 
           <div class={styles.inputContainer}>
             <input
                 type="text"
