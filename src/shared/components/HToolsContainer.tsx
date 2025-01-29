@@ -23,7 +23,7 @@ const HToolsContainer: Component<HToolsContainer> = ({containers, minHeight}) =>
             <For each={containers} fallback={<a>error</a>}>
             { (toolContainer) => 
                 <div class={styles.title_tool_container} style={{"min-height": minHeight}}>
-                    {toolContainer.title}
+                    <b>{toolContainer.title}</b>
                     <div class={styles.tool_container}>
                         {toolContainer.tool()}      
                     </div>
