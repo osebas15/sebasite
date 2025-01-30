@@ -25,7 +25,7 @@ const svgUnchecked = () => (
         width="24"
         height="24"
         fill="none"
-        stroke="gray"
+        stroke="black"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -54,15 +54,16 @@ const svgChecked = () => (
 const TodoCell: Component<TodoCellProps> = ({todo, action}) => {
     return (
         <div class={style.main}>
-            <b>{todo.task}</b>
             <div class={style.button_container}>
-                <button onClick={() => { action('COMPLETE', [todo]) }}>
+                <button class={style.checkcircle} onClick={() => { action('COMPLETE', [todo]) }}>
                     {todo.is_complete ? svgChecked() : svgUnchecked()}
                 </button>
+                {/*
                 <button onClick={() => { action('DELETE', [todo]) }}>
                     X
-                </button>
+                </button>*/}
             </div>
+            <b class={style.task}>{todo.task}</b>
         </div>
     )
 }
