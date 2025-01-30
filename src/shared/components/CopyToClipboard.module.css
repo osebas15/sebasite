@@ -1,0 +1,9 @@
+.urlText {
+    font-size: 0.75em;
+    font-style: italic;
+}
+
+.copyToClipboard {
+    display: flex;
+    flex-wrap: wrap;
+}

@@ -3,6 +3,8 @@ import {
     createSignal
 } from 'solid-js'
 
+import styles from './CopyToClipboard.module.css'
+
 interface CopyToClipboardProps{
     text: string
 }
@@ -46,8 +48,8 @@ const CopyToClipboard: Component<CopyToClipboardProps> = ({text}) => {
     };
     
     return (
-        <div>
-            <a>{text}</a>
+        <div class={styles.copyToClipboard}>
+            <a class={styles.urlText}>{text}</a>
             <button onClick={copyUrl}>
                 {copied() ? copied_clipboard_svg : new_clipboard_svg}
             </button>
