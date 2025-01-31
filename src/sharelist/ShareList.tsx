@@ -38,6 +38,29 @@ const createLoadTodos = (list_id?: string) => (async () => {
     return data
 })
 
+const orderTodos = (todos: Todo[]): Todo[] => {
+  return [...todos].sort((left: Todo, right: Todo) => {
+    const now = new Date();
+    const tenMinutesAgo = new Date(now.getTime() - (10 * 60 * 1000));
+
+    const leftDate = new Date(left.inserted_at ?? 0);
+    const rightDate = new Date(right.inserted_at ?? 0);
+
+    const leftIsRecent = leftDate > tenMinutesAgo;
+    const rightIsRecent = rightDate > tenMinutesAgo;
+
+    if (!(left.is_complete == right.is_complete)){
+      return left.is_complete ? 1 : -1
+    }
+
+    if (leftIsRecent || rightIsRecent) {
+      return rightDate.getTime() - leftDate.getTime(); // Newest to oldest
+    }
+
+    return left.task.localeCompare(right.task); // Alphabetical order
+  })
+}
+
 const ShareList: Component<ShareListProps> = ({list_id}) => {
 
     let [upstreamTodos, {mutate, refetch}] = createResource(createLoadTodos(list_id))
@@ -59,7 +82,6 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       if (newTodos) {
         setTodos(newTodos)
       }
-      console.log("Updated share URL:", shareUrl()); // This will always log the latest value
     })
 
     onMount(() => {
@@ -155,7 +177,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
                 New todo
             </button>
           </div>
-          <For each={todos}>
+          <For each={orderTodos(todos)}>
               {(todo) => <TodoCell todo={todo} action={todoActions}/>}
           </For>
         </div>
