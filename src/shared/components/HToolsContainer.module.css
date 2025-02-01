@@ -32,7 +32,7 @@
 .tool_container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     margin-top: 20px;
     flex-grow: 1;
 }
