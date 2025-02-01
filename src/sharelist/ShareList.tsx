@@ -4,7 +4,8 @@ import {
     For, 
     createSignal, 
     createResource,
-    onMount
+    onMount,
+    onCleanup
 } from 'solid-js';
 
 import {
@@ -84,34 +85,53 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       }
     })
 
-    onMount(() => {
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            createTodo({
-                task: inputTodo(),
-                is_complete: false,
-                list_id: list_id ?? 'error'
-            })
-          }
-        })
-    
-        subscription = supabase
-          .from<Todo>(`todos:list_id=eq.${list_id}`)
-          .on('*', (payload) => {
-            switch (payload.eventType) {
-              case 'INSERT':
-                setTodos((prev) => [...prev, payload.new])
-                break
-              case 'UPDATE':
-                setTodos((item) => item.id === payload.new.id, payload.new)
-                break
-              case 'DELETE':
-                setTodos((prev) => prev.filter((item) => item.id != payload.old.id))
-                break
-            }
-          })
-          .subscribe()
+    const createSubscription = () => {
+      subscription = supabase
+      .from<Todo>(`todos:list_id=eq.${list_id}`)
+      .on('*', (payload) => {
+        switch (payload.eventType) {
+          case 'INSERT':
+            setTodos((prev) => [...prev, payload.new])
+            break
+          case 'UPDATE':
+            setTodos((item) => item.id === payload.new.id, payload.new)
+            break
+          case 'DELETE':
+            setTodos((prev) => prev.filter((item) => item.id != payload.old.id))
+            break
+        }
       })
+      .subscribe()
+    }
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+          createSubscription();
+      }
+    };
+
+    onMount(() => {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          createTodo({
+              task: inputTodo(),
+              is_complete: false,
+              list_id: list_id ?? 'error'
+          })
+        }
+      })
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      
+      createSubscription()
+    })
+
+    onCleanup(() => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (subscription) {
+          supabase.removeSubscription(subscription);
+      }
+    });
 
     async function completeTodo(id: number) {
         const { error } = await supabase
