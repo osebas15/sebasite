@@ -33,7 +33,6 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    margin-top: 20px;
     flex-grow: 1;
 }
 
@@ -41,4 +40,5 @@
     font-size: 1.5em; /* Increase font size */
     font-weight: bold; /* Extra emphasis */
     letter-spacing: 1px; /* Improve readability */
+    margin-bottom: 20px;
 }
