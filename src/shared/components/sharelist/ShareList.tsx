@@ -13,13 +13,13 @@ import {
 } from '@solidjs/router'
 
 import { RealtimeSubscription } from '@supabase/supabase-js'
-import { supabase } from '../backend/supabase';
+import { supabase } from '../../../backend/supabase';
 import { createStore } from 'solid-js/store';
 
 import styles from './ShareList.module.css'
-import { Todo, TodoAction, TodoCell, TodoVerb } from './TodoCell';
-import CopyToClipboard from '../shared/components/CopyToClipboard';
-
+import { Todo, TodoCell, TodoVerb } from './TodoCell';
+import CopyToClipboard from '../CopyToClipboard';
+import contStyles from "../HToolsContainer.module.css"
 
 interface ShareListProps {
     list_id?: string
@@ -122,7 +122,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       })
 
       document.addEventListener('visibilitychange', handleVisibilityChange);
-      
+
       createSubscription()
     })
 
@@ -180,6 +180,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
 
     return (
         <div class={styles.main}>
+          <b class={contStyles.title}>Share your Todo List</b>
           <a>Share this link to share your list!</a>
           <CopyToClipboard text={`${window.location.origin}${location.pathname}`}/> 
           <div class={styles.inputContainer}>

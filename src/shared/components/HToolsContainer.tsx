@@ -7,7 +7,6 @@ import {
 import styles from "./HToolsContainer.module.css"
 
 interface ToolContainer {
-    title: string
     tool: () => JSX.Element
     color: string
 }
@@ -23,7 +22,7 @@ const HToolsContainer: Component<HToolsContainer> = ({containers, minHeight}) =>
             <For each={containers} fallback={<a>error</a>}>
             { (toolContainer) => 
                 <div class={styles.title_tool_container} style={{"min-height": minHeight}}>
-                    <b class={styles.title}>{toolContainer.title}</b>
+                    {/*<b class={styles.title}>{toolContainer.title}</b>*/}
                     <div class={styles.tool_container}>
                         {toolContainer.tool()}      
                     </div>

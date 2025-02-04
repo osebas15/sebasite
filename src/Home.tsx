@@ -7,7 +7,7 @@ import { useNavigate } from "@solidjs/router";
 import ShareListCreator from './shared/components/ShareListCreator';
 import { Component } from 'solid-js';
 import AboutMe from './AboutMe';
-import ShareList from './sharelist/ShareList';
+import ShareList from './shared/components/sharelist/ShareList';
 
 interface HomeProps {
   list_id?: string

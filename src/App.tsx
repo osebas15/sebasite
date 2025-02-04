@@ -8,7 +8,7 @@ import Home from './Home';
 import styles from './App.module.css';
 import { Component } from 'solid-js';
 import { Router, Route } from "@solidjs/router";
-import ShareList from './sharelist/ShareList';
+import ShareList from './shared/components/sharelist/ShareList';
 
 const App: Component = () => {
   return (
