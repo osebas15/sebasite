@@ -173,6 +173,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
             break
         case 'DELETE':
             updatedTodos.forEach((todo) => deleteTodo(todo))
+            break
         default :
             console.error(`unimplemented switch case ${verb}`)
     }
@@ -183,6 +184,12 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     navigate(`/sharelist/${id}`)
     setMenuOpen(false)
     setCurrentUrl(`${window.location.origin}${location.pathname}`);
+  }
+
+  async function deleteComplete() {
+    let toDelete = todos.filter((todo) => todo.is_complete == true)
+    setMenuOpen(false)
+    todoActions('DELETE', toDelete)
   }
 
   return (
@@ -197,10 +204,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       {menuOpen() && (
         <div class={styles.overlayMenu}>
           <ul>
-            <li onClick={newList}>New List</li>
-            <li>2</li>
-            <li>3</li>
-            <li>4</li>
+            <li onClick={newList}>New list</li>
+            <li onClick={deleteComplete}>Remove completed todos</li>
           </ul>
         </div>
       )}
