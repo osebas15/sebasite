@@ -17,13 +17,11 @@ const Home: Component<HomeProps> = ({list_id}) => {
   const navigate = useNavigate()
 
   const qrCodeContainer: ToolContainer = {
-    title: "QRCode Generator",
     tool: () => <QRGenerator placeholder={'https://sebasite.netlify.app/'}/>,
     color: 'black'
   }
 
   const shareListCreatorContainer: ToolContainer = {
-    title: "Share your todo list",
     tool: () => {
       if (list_id){
         return <ShareList list_id={list_id}/>
