@@ -9,7 +9,8 @@ import {
 } from 'solid-js';
 
 import {
-  useLocation
+  useLocation,
+  useNavigate
 } from '@solidjs/router'
 
 import { RealtimeSubscription } from '@supabase/supabase-js'
@@ -20,6 +21,7 @@ import styles from './ShareList.module.css'
 import { Todo, TodoCell, TodoVerb } from './TodoCell';
 import CopyToClipboard from '../CopyToClipboard';
 import contStyles from "../HToolsContainer.module.css"
+import { v4 } from 'uuid';
 
 interface ShareListProps {
     list_id?: string
@@ -63,21 +65,19 @@ const orderTodos = (todos: Todo[]): Todo[] => {
 }
 
 const ShareList: Component<ShareListProps> = ({list_id}) => {
+  let location = useLocation()
+  let navigate = useNavigate()
+
   let [upstreamTodos, {mutate, refetch}] = createResource(createLoadTodos(list_id))
   let [todos, setTodos] = createStore<Todo[]>([])
   let [inputTodo, setInputTodo] = createSignal<string>('')
-  let [shareUrl, setShareUrl] = createSignal<string>('')
+  let [currentUrl, setCurrentUrl] = createSignal(`${window.location.origin}${location.pathname}`);
   let [menuOpen, setMenuOpen] = createSignal<boolean>(false);
 
   let subscription: RealtimeSubscription | null
 
-  let location = useLocation()
-  
   createEffect(() => {
-    const newShareUrl = `${window.location.origin}${location.pathname}`
-    if (newShareUrl) {
-      setShareUrl(newShareUrl)
-    }
+    setCurrentUrl(`${window.location.origin}${location.pathname}`);
 
     const newTodos = upstreamTodos()
     if (newTodos) {
@@ -179,7 +179,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   }
 
   async function newList() {
-
+    const id = v4().toString().split('-')[0]
+    navigate(`/sharelist/${id}`)
+    setMenuOpen(false)
+    setCurrentUrl(`${window.location.origin}${location.pathname}`);
   }
 
   return (
@@ -194,7 +197,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       {menuOpen() && (
         <div class={styles.overlayMenu}>
           <ul>
-            <li onClick={() => console.log("1")}></li>
+            <li onClick={newList}>New List</li>
             <li>2</li>
             <li>3</li>
             <li>4</li>
@@ -202,8 +205,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         </div>
       )}
       </div>
-      <a>Share this link to share your list!</a>
-      <CopyToClipboard text={`${window.location.origin}${location.pathname}`}/> 
+      <CopyToClipboard text={currentUrl}/> 
       <div class={styles.inputContainer}>
         <input
           type="text"

@@ -6,7 +6,7 @@ import {
 import styles from './CopyToClipboard.module.css'
 
 interface CopyToClipboardProps{
-    text: string
+    text: () => string
 }
 
 const new_clipboard_svg = (
@@ -39,7 +39,7 @@ const CopyToClipboard: Component<CopyToClipboardProps> = ({text}) => {
     
     const copyUrl = async () => {
         try {
-            await navigator.clipboard.writeText(text);
+            await navigator.clipboard.writeText(text());
             setCopied(true);
             setTimeout(() => setCopied(false), 10000);
         } catch (err) {
@@ -49,7 +49,10 @@ const CopyToClipboard: Component<CopyToClipboardProps> = ({text}) => {
     
     return (
         <div class={styles.copyToClipboard}>
-            <a class={styles.urlText}>{text}</a>
+            <div class={styles.VStack}>
+                <a>Share this link to share your list!</a>
+                <a class={styles.urlText}>{text()}</a>
+            </div>
             <button onClick={copyUrl}>
                 {copied() ? copied_clipboard_svg : new_clipboard_svg}
             </button>
