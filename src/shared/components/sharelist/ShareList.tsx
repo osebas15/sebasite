@@ -70,9 +70,11 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
 
   let [upstreamTodos, {mutate, refetch}] = createResource(createLoadTodos(list_id))
   let [todos, setTodos] = createStore<Todo[]>([])
+  let [listIds, setListIds] = createStore<string[]>([])
   let [inputTodo, setInputTodo] = createSignal<string>('')
-  let [currentUrl, setCurrentUrl] = createSignal(`${window.location.origin}${location.pathname}`);
-  let [menuOpen, setMenuOpen] = createSignal<boolean>(false);
+  let [currentUrl, setCurrentUrl] = createSignal(`${window.location.origin}${location.pathname}`)
+  let [menuOpen, setMenuOpen] = createSignal<boolean>(false)
+  let [showPreviousLists, setShowPreviousLists] = createSignal<boolean>(false)
 
   let subscription: RealtimeSubscription | null
 
@@ -120,6 +122,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         })
       }
     })
+
+    loadPreviousListIds()
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
@@ -192,10 +196,20 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     todoActions('DELETE', toDelete)
   }
 
-  function getPreviousListIds(): string[]{
-    return JSON.parse(localStorage.getItem("list_ids") || "[]");
+  async function loadPreviousListIds(){
+    //let savedIds: string[] = JSON.parse(localStorage.getItem("list_ids") || "[]")
+    setListIds(["1", "2", "3", "4"])
   }
 
+  async function showListIdsPressed(){
+    setMenuOpen(false)
+
+    let showingIds = showPreviousLists()
+    console.log(`showingIds ${showingIds}`)
+    setShowPreviousLists(!showingIds)
+  }
+
+  /*
   async function saveList(list_id: string) {
       // Get the existing list from localStorage or initialize an empty array
     var existingList = getPreviousListIds()
@@ -211,7 +225,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     // Save the updated array back to localStorage
     localStorage.setItem("list_ids", JSON.stringify(existingList));
   }
-
+*/
   return (
     <div class={styles.main}>
       <div class={styles.header}>
@@ -221,14 +235,22 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         </div>
       </div>
       <div class={styles.overlayMenuContainer}>
-      {menuOpen() && (
-        <div class={styles.overlayMenu}>
-          <ul>
-            <li onClick={newList}>New list</li>
-            <li onClick={deleteComplete}>Remove completed todos</li>
-          </ul>
-        </div>
-      )}
+        {menuOpen() && (
+          <div class={styles.overlayMenu}>
+            <ul>
+              <li onClick={newList}>New list</li>
+              <li onClick={deleteComplete}>Remove completed todos</li>
+              <li onClick={showListIdsPressed}>{showPreviousLists() ? "Hide saved lists" : "Show saved lists"}</li>
+            </ul>
+          </div>
+        )}
+      </div>
+      <div class={styles.vstack}>
+        {showPreviousLists() && (
+          <For each={listIds}>
+            {(id) => <div>{id}</div>}
+          </For>
+        )}
       </div>
       <CopyToClipboard text={currentUrl}/> 
       <div class={styles.inputContainer}>

@@ -25,6 +25,11 @@
     height: 100%;
 }
 
+.vstack { 
+    display: flex;
+    flex-direction: column;
+}
+
 .header {
     display: flex;
     flex-direction: row;
