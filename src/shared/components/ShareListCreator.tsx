@@ -20,7 +20,7 @@ const ShareListCreator: Component = () => {
 
     const navigate = useNavigate()
     const handleClick = () => {
-        let listId = `${listUUID}-${listName}`
+        let listId = `${listUUID()}-${listName()}`
         addListIds([listId])
         navigate(`/sharelist/${listId}`)
     }
