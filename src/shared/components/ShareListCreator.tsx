@@ -1,25 +1,33 @@
 import { 
     Component,
-    createSignal
+    createSignal,
+    onMount
 } from 'solid-js'
 
 import {
     useNavigate
 } from '@solidjs/router'
 
+import { addListIds } from '../../backend/listids';
+import { createShortUUID } from '../utils/crypto';
+
 import styles from './ShareListCreator.module.css';
 import contStyles from "./HToolsContainer.module.css"
 
-import { v4 } from 'uuid';
-
 const ShareListCreator: Component = () => {
     const [listName, setListName] = createSignal("")
+    const [listUUID, setListUUID] = createSignal("")
 
     const navigate = useNavigate()
     const handleClick = () => {
-        const id = v4().toString().split('-')[0]
-        navigate(`/sharelist/${id}`)
+        let listId = `${listUUID}-${listName}`
+        addListIds([listId])
+        navigate(`/sharelist/${listId}`)
     }
+
+    onMount(() => {
+        setListUUID(createShortUUID())
+    })
 
     return (
         <a class={styles.mainContainer}>
@@ -27,7 +35,7 @@ const ShareListCreator: Component = () => {
             <input 
                 type="text" 
                 class={styles.textField} 
-                placeholder="Enter list name" 
+                placeholder={listUUID()} 
                 value={listName()} 
                 onInput={(e) => setListName(e.currentTarget.value)} 
             />
