@@ -19,8 +19,10 @@ import { createStore } from 'solid-js/store';
 
 import styles from './ShareList.module.css'
 import { Todo, TodoCell, TodoVerb } from './TodoCell';
+import ListIdCell from './ListIdCell'
 import CopyToClipboard from '../CopyToClipboard';
 import contStyles from "../HToolsContainer.module.css"
+import { storedListIds } from '../../../backend/listids';
 import { v4 } from 'uuid';
 
 interface ShareListProps {
@@ -184,10 +186,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   }
 
   async function newList() {
-    const id = v4().toString().split('-')[0]
-    navigate(`/sharelist/${id}`)
+    navigate("/")
     setMenuOpen(false)
-    setCurrentUrl(`${window.location.origin}${location.pathname}`);
   }
 
   async function deleteComplete() {
@@ -247,8 +247,8 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       </div>
       <div class={styles.vstack}>
         {showPreviousLists() && (
-          <For each={listIds}>
-            {(id) => <div>{id}</div>}
+          <For each={storedListIds()}>
+            {(id) => <ListIdCell id={id}/>}
           </For>
         )}
       </div>

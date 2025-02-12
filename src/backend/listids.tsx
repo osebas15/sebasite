@@ -7,18 +7,18 @@ function getAllIds(): string[]{
     return storedIds ? JSON.parse(storedIds) : [];
 }
 
-const [listIds, setListIds] = createSignal<string[]>(getAllIds());
+const [storedListIds, setStoredListIds] = createSignal<string[]>(getAllIds());
 
 function addListIds(ids: string[]){
-    const updatedIds = [...new Set([...listIds(), ...ids])];
-    setListIds(updatedIds);
+    const updatedIds = [...new Set([...storedListIds(), ...ids])];
+    setStoredListIds(updatedIds);
     localStorage.setItem("listids", JSON.stringify(updatedIds));
 }
 
 function deleteIds(ids: string[]){
-    const updatedIds = listIds().filter(id => !ids.includes(id));
-    setListIds(updatedIds);
+    const updatedIds = storedListIds().filter(id => !ids.includes(id));
+    setStoredListIds(updatedIds);
     localStorage.setItem("listids", JSON.stringify(updatedIds));
 }
 
-export { listIds, addListIds, deleteIds };
+export { storedListIds, addListIds, deleteIds };
