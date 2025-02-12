@@ -1,5 +1,6 @@
 import { 
-    Component
+    Component,
+    createSignal
 } from 'solid-js'
 
 import {
@@ -12,6 +13,8 @@ import contStyles from "./HToolsContainer.module.css"
 import { v4 } from 'uuid';
 
 const ShareListCreator: Component = () => {
+    const [listName, setListName] = createSignal("")
+
     const navigate = useNavigate()
     const handleClick = () => {
         const id = v4().toString().split('-')[0]
@@ -21,6 +24,13 @@ const ShareListCreator: Component = () => {
     return (
         <a class={styles.mainContainer}>
             <b class={contStyles.title}>Share your Todo List</b>
+            <input 
+                type="text" 
+                class={styles.textField} 
+                placeholder="Enter list name" 
+                value={listName()} 
+                onInput={(e) => setListName(e.currentTarget.value)} 
+            />
             <button type="button" class={styles.centeredButton} onClick={handleClick}>
                 create list
             </button>
