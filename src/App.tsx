@@ -17,11 +17,9 @@ const App: Component = () => {
         <Route path="/" component={() => <Home/>} />
         <Route
           path="/sharelist/:list_id"
-          component={({params}) => <Home list_id={params.list_id}/>}
+          component={({params}) => <Home/>}
         />
       </Router>
-      <div class={styles.bottomBar}>
-      </div>
     </div>
   );
 };

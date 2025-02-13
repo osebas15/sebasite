@@ -2,19 +2,29 @@ import styles from './App.module.css';
 import images from './assets/imageConstants';
 import LogoLink from './shared/components/LogoLink';
 import QRGenerator from './shared/components/QRCodeCreator';
-import { HToolsContainer, ToolContainer } from './shared/components/HToolsContainer';
-import { useNavigate } from "@solidjs/router";
+
+import { 
+  HToolsContainer, 
+  ToolContainer 
+} from './shared/components/HToolsContainer';
+
+import { 
+  useNavigate,
+  useParams 
+} from "@solidjs/router";
+
 import ShareListCreator from './shared/components/ShareListCreator';
-import { Component } from 'solid-js';
+
+import { 
+  Component 
+} from 'solid-js';
+
 import AboutMe from './AboutMe';
 import ShareList from './shared/components/sharelist/ShareList';
 
-interface HomeProps {
-  list_id?: string
-}
-
-const Home: Component<HomeProps> = ({list_id}) => {
+const Home: Component = () => {
   const navigate = useNavigate()
+  const params = useParams()
 
   const qrCodeContainer: ToolContainer = {
     tool: () => <QRGenerator placeholder={'https://sebasite.netlify.app/'}/>,
@@ -23,8 +33,8 @@ const Home: Component<HomeProps> = ({list_id}) => {
 
   const shareListCreatorContainer: ToolContainer = {
     tool: () => {
-      if (list_id){
-        return <ShareList list_id={list_id}/>
+      if (params.list_id){
+        return <ShareList list_id={params.list_id}/>
       }
       else {
         return <ShareListCreator/>
@@ -34,7 +44,7 @@ const Home: Component<HomeProps> = ({list_id}) => {
   }
 
   let containers: () => ToolContainer[] = () => {
-    if (list_id){
+    if (params.list_id){
       return [shareListCreatorContainer, qrCodeContainer]
     }
     else {
