@@ -6,14 +6,24 @@ import {
     deleteIds
 } from '../../../backend/listids'
 
+import {
+    useNavigate
+} from '@solidjs/router'
+
 interface ListIdCellProps {
     id: string
 }
 
 const ListIdCell: Component<ListIdCellProps> = ({id}) => {
+    const navigate = useNavigate()
+
     const deleteClicked = () => {
         console.log("deleting")
         deleteIds([id])
+    }
+
+    const navigateToList = () => {
+        navigate(`/sharelist/${id}`)
     }
 
     return(
@@ -21,7 +31,7 @@ const ListIdCell: Component<ListIdCellProps> = ({id}) => {
             <button onClick={deleteClicked}>
                 X
             </button>
-            <b>{id}</b>
+            <b onClick={navigateToList}>{id}</b>
         </div>
     )
 }
