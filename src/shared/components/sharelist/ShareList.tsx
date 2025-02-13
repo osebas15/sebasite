@@ -22,7 +22,7 @@ import { Todo, TodoCell, TodoVerb } from './TodoCell';
 import ListIdCell from './ListIdCell'
 import CopyToClipboard from '../CopyToClipboard';
 import contStyles from "../HToolsContainer.module.css"
-import { storedListIds } from '../../../backend/listids';
+import { storedListIds, addListIds } from '../../../backend/listids';
 import { v4 } from 'uuid';
 
 interface ShareListProps {
@@ -127,6 +127,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
 
     loadPreviousListIds()
 
+    if (list_id != undefined) {
+      addListIds([list_id])
+    }
+    
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     createSubscription()
