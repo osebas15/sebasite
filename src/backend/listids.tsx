@@ -21,4 +21,9 @@ function deleteIds(ids: string[]){
     localStorage.setItem("listids", JSON.stringify(updatedIds));
 }
 
-export { storedListIds, addListIds, deleteIds };
+function listIdToName(listId: string): string {
+    const name = listId.split("-").slice(1).join("-");
+    return name;
+}
+
+export { storedListIds, addListIds, deleteIds, listIdToName };

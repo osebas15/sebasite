@@ -3,12 +3,15 @@ import {
 } from 'solid-js'
 
 import {
-    deleteIds
+    deleteIds,
+    listIdToName
 } from '../../../backend/listids'
 
 import {
     useNavigate
 } from '@solidjs/router'
+
+import styles from './ListIdCell.module.css'
 
 interface ListIdCellProps {
     id: string
@@ -27,11 +30,11 @@ const ListIdCell: Component<ListIdCellProps> = ({id}) => {
     }
 
     return(
-        <div>
+        <div class={styles.listIdCell}>
             <button onClick={deleteClicked}>
                 X
             </button>
-            <b onClick={navigateToList}>{id}</b>
+            <b class={styles.name} onClick={navigateToList}>{listIdToName(id) || id}</b>
         </div>
     )
 }
