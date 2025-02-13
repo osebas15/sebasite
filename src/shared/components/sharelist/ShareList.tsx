@@ -87,6 +87,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     if (newTodos) {
       setTodos(newTodos)
     }
+
+    if (list_id != undefined && !storedListIds().includes(list_id)){
+      newList()
+    }
   })
 
   const createSubscription = () => {
@@ -213,23 +217,6 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     setShowPreviousLists(!showingIds)
   }
 
-  /*
-  async function saveList(list_id: string) {
-      // Get the existing list from localStorage or initialize an empty array
-    var existingList = getPreviousListIds()
-
-    // Ensure it's an array before pushing
-    if (Array.isArray(existingList)) {
-      existingList.push(list_id);
-    } else {
-      console.error("Invalid data in localStorage, resetting list.");
-      existingList = [list_id];
-    }
-
-    // Save the updated array back to localStorage
-    localStorage.setItem("list_ids", JSON.stringify(existingList));
-  }
-*/
   return (
     <div class={styles.main}>
       <div class={styles.header}>
