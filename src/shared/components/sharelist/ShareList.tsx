@@ -22,7 +22,7 @@ import { Todo, TodoCell, TodoVerb } from './TodoCell';
 import ListIdCell from './ListIdCell'
 import CopyToClipboard from '../CopyToClipboard';
 import contStyles from "../HToolsContainer.module.css"
-import { storedListIds, addListIds } from '../../../backend/listids';
+import { storedListIds, addListIds, listIdToName } from '../../../backend/listids';
 import { v4 } from 'uuid';
 
 interface ShareListProps {
@@ -129,8 +129,6 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       }
     })
 
-    loadPreviousListIds()
-
     if (list_id != undefined) {
       addListIds([list_id])
     }
@@ -146,6 +144,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         supabase.removeSubscription(subscription);
     }
   });
+
+  function shareListUrlToListName(url: string){
+    return listIdToName(url.split('sharelist/').slice(1).join('sharelist/')) || "Your List"
+  }
 
   async function completeTodo(id: number) {
     const { error } = await supabase
@@ -204,11 +206,6 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     todoActions('DELETE', toDelete)
   }
 
-  async function loadPreviousListIds(){
-    //let savedIds: string[] = JSON.parse(localStorage.getItem("list_ids") || "[]")
-    setListIds(["1", "2", "3", "4"])
-  }
-
   async function showListIdsPressed(){
     setMenuOpen(false)
 
@@ -220,7 +217,9 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   return (
     <div class={styles.main}>
       <div class={styles.header}>
-        <b class={contStyles.title}>Share your Todo List</b>
+        <b class={contStyles.title}>
+          {shareListUrlToListName(currentUrl())}
+        </b>
         <div class={styles.burgerIcon} onClick={() => setMenuOpen(!menuOpen())}>
           &#9776;
         </div>

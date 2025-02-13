@@ -1,14 +1,17 @@
 import { 
     Component,
     createSignal,
-    onMount
+    onMount,
+    For
 } from 'solid-js'
 
 import {
     useNavigate
 } from '@solidjs/router'
 
-import { addListIds } from '../../backend/listids';
+import ListIdCell from './sharelist/ListIdCell';
+
+import { addListIds, storedListIds } from '../../backend/listids';
 import { createShortUUID } from '../utils/crypto';
 
 import styles from './ShareListCreator.module.css';
@@ -31,6 +34,9 @@ const ShareListCreator: Component = () => {
 
     return (
         <a class={styles.mainContainer}>
+            <For each={storedListIds()}>
+                {(id) => <ListIdCell id={id}/>}
+            </For>
             <b class={contStyles.title}>Share your Todo List</b>
             <input 
                 type="text" 
