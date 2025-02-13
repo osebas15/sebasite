@@ -41,7 +41,7 @@ const ShareListCreator: Component = () => {
             <input 
                 type="text" 
                 class={styles.textField} 
-                placeholder={listUUID()} 
+                placeholder="name for your list" 
                 value={listName()} 
                 onInput={(e) => setListName(e.currentTarget.value)} 
             />
