@@ -23,7 +23,6 @@ import ListIdCell from './ListIdCell'
 import CopyToClipboard from '../CopyToClipboard';
 import contStyles from "../HToolsContainer.module.css"
 import { storedListIds, addListIds, listIdToName } from '../../../backend/listids';
-import { v4 } from 'uuid';
 
 interface ShareListProps {
     list_id?: string
