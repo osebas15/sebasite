@@ -9,7 +9,7 @@ type Todo = {
     list_id: string
 }
 
-type TodoVerb = 'COMPLETE' | 'CREATE' | 'DELETE'
+type TodoVerb = 'COMPLETE' | 'UNCHECK' | 'CREATE' | 'DELETE'
 
 type TodoAction = (verb: TodoVerb, updatedTodos: Todo[]) => Promise<void>
 

@@ -149,11 +149,11 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
     return listIdToName(url.split('sharelist/').slice(1).join('sharelist/')) || "Your List"
   }
 
-  async function completeTodo(id: number) {
+  async function setCompletionForTodo(id: number, isComplete: boolean) {
     const { error } = await supabase
       .from<Todo>('todos')
       .update({
-        is_complete: true
+        is_complete: isComplete
       })
       .eq('id', id)
     if (error) {
@@ -182,7 +182,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   async function todoActions(verb: TodoVerb, updatedTodos: Todo[]){
     switch (verb) {
         case 'COMPLETE':
-            updatedTodos.forEach((todo) => completeTodo(todo.id!))
+            updatedTodos.forEach((todo) => setCompletionForTodo(todo.id!, true))
+            break
+        case 'UNCHECK':
+            updatedTodos.forEach((todo) => setCompletionForTodo(todo.id!, false))
             break
         case 'CREATE':
             updatedTodos.forEach((todo) => createTodo(todo))
@@ -198,6 +201,12 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   async function newList() {
     navigate("/")
     setMenuOpen(false)
+  }
+
+  async function resetList() {
+    let toReset = todos.filter((todo) => todo.is_complete == true)
+    setMenuOpen(false)
+    todoActions('UNCHECK', toReset)
   }
 
   async function deleteComplete() {
@@ -229,6 +238,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
           <div class={styles.overlayMenu}>
             <ul>
               <li onClick={newList}>New list</li>
+              <li onClick={resetList}>Reset list</li>
               <li onClick={deleteComplete}>Remove completed todos</li>
               <li onClick={showListIdsPressed}>{showPreviousLists() ? "Hide saved lists" : "Show saved lists"}</li>
             </ul>
