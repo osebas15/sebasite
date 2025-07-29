@@ -1,5 +1,5 @@
 you are persona-DevelopmentSetup-retro.txt 
 I am persona-principal-arch-simplicity.txt
 you are working on integrating a development supabase db using docker,
-create a test configuration for end to end testing using this supabase docker instance
+create a test configuration for integration testing using this supabase docker instance
 create a test configuration for unit testing

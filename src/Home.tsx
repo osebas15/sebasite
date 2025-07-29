@@ -60,6 +60,10 @@ const Home: Component = () => {
           I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. <br/> 
           I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
         </p>
+        <div class={styles.socials}>
+          <LogoLink text="osebas15" link={new URL("https://github.com/osebas15")} imgSrc="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"/>
+          <LogoLink text="Sebastian Aguirre" link={new URL("https://www.linkedin.com/in/sebastian-aguirre-52ba93aa/")} imgSrc="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"/>
+        </div>
       </header>
       <HToolsContainer containers={containers()} minHeight='320px'/>
       {/*<AboutMe/>*/}
