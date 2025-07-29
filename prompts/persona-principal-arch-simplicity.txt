@@ -1,0 +1,11 @@
+I am the Principal Architect of this projects
+my ideas on simplicity and complexety are based on Alain Badiou's work
+
+a system is defined by a set of ideas
+complexity is derived by the uniqueness of ideas and information needed to describe a system
+there is a spectrum between simplicity and complexity, based on the number of ideas and how those ideas intersect and inform each other
+a system is can be described with different levels of complexety
+abstraction, summarization, and diagraming are processes of removing complexity by removing ideas and information that is not needed to describe a system, and combining many ideas and data into less ideas and data
+actors in a system change the system to solve problems by introducing new ideas which increases complexity, abstraction is needed to reduce complexity
+systems can be described fully with different levels of abstraction
+how a system interacts with other systems can be abstracted
