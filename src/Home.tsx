@@ -63,6 +63,7 @@ const Home: Component = () => {
         <div class={styles.socials}>
           <LogoLink text="osebas15" link={new URL("https://github.com/osebas15")} imgSrc="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"/>
           <LogoLink text="Sebastian Aguirre" link={new URL("https://www.linkedin.com/in/sebastian-aguirre-52ba93aa/")} imgSrc="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"/>
+          <LogoLink text="anothervibecoder" link={new URL("https://www.twitch.tv/anothervibecoder")} imgSrc={images.glitch_flat_purple}/>
         </div>
       </header>
       <HToolsContainer containers={containers()} minHeight='320px'/>
