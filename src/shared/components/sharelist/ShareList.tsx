@@ -76,6 +76,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   let [currentUrl, setCurrentUrl] = createSignal(`${window.location.origin}${location.pathname}`)
   let [menuOpen, setMenuOpen] = createSignal<boolean>(false)
   let [showPreviousLists, setShowPreviousLists] = createSignal<boolean>(false)
+  let [inputError, setInputError] = createSignal<string>('')
 
   let subscription: RealtimeSubscription | null
 
@@ -161,6 +162,11 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   }
 
   async function createTodo(newTodo: Todo){
+    if (!newTodo.task || newTodo.task.length <= 3) {
+      setInputError('Todo item must be longer than 3 characters.');
+      return;
+    }
+    setInputError('');
     const { data, error } = await supabase.from<Todo>('todos').insert(newTodo)
     if (error) {
       console.error(error)
@@ -257,7 +263,10 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
           type="text"
           name="todo"
           value={inputTodo()}
-          onInput={(e) => setInputTodo(e.target.value)}
+          onInput={(e) => {
+            setInputTodo(e.target.value);
+            if (inputError() && e.target.value.length > 3) setInputError('');
+          }}
         />
         <button onClick={() => todoActions('CREATE', [{
           task: inputTodo(),
@@ -266,6 +275,9 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
         }])}>
           New todo
         </button>
+        {inputError() && (
+          <div style={{ color: 'red', marginTop: '8px' }}>{inputError()}</div>
+        )}
       </div>
       <For each={orderTodos(todos)}>
         {(todo) => <TodoCell todo={todo} action={todoActions}/>}
