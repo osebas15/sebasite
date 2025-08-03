@@ -27,7 +27,7 @@ export default function ChatAppSolid() {
       });
       const data = await res.json();
       const assistantMsg: Message = { role: 'assistant', content: data.content || 'No response.' };
-      setMessages([...messages(), userMsg, assistantMsg]);
+      setMessages([...messages(), assistantMsg]);
     } catch (err) {
       setMessages([...messages(), { role: 'assistant', content: 'Error: Unable to get response.' }]);
     } finally {
@@ -54,7 +54,7 @@ export default function ChatAppSolid() {
 
   return (
     <div class={styles.chatApp}>
-      <div class={styles.header}>Chat with Sebastian Aguirre</div>
+      <div class={styles.header}>Sebastian's Resume Bot (GPT-4o)</div>
       <div class={styles.messages}>
         {messages().map((msg, idx) => (
           <div class={msg.role === 'user' ? styles.userMsg : styles.assistantMsg}>
