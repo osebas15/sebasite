@@ -14,6 +14,7 @@ import {
 } from "@solidjs/router";
 
 import ShareListCreator from './shared/components/ShareListCreator';
+import ChatAppSolid from './resume_bot/ChatAppSolid';
 
 import { 
   Component 
@@ -43,12 +44,17 @@ const Home: Component = () => {
     color: 'black'
   }
 
+  const chatContainer: ToolContainer = {
+    tool: () => <ChatAppSolid />, 
+    color: 'black'
+  }
+
   let containers: () => ToolContainer[] = () => {
     if (params.list_id){
-      return [shareListCreatorContainer, qrCodeContainer]
+      return [shareListCreatorContainer, qrCodeContainer, chatContainer]
     }
     else {
-      return [qrCodeContainer, shareListCreatorContainer]
+      return [qrCodeContainer, shareListCreatorContainer, chatContainer]
     }
   }
 

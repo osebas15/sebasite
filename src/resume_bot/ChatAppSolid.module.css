@@ -1,0 +1,77 @@
+.chatApp {
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  max-width: 500px;
+  margin: 0 auto;
+}
+.header {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.messages {
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  background: #f7f7f7;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+.userMsg {
+  text-align: right;
+  color: #1976d2;
+  margin: 0.5rem 0;
+  background: #e3f2fd;
+  border-radius: 12px 12px 0 12px;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  max-width: 80%;
+  float: right;
+}
+.assistantMsg {
+  text-align: left;
+  color: #333;
+  margin: 0.5rem 0;
+  background: #e0e0e0;
+  border-radius: 12px 12px 12px 0;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  max-width: 80%;
+  float: left;
+}
+.inputRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+.input {
+  flex: 1;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: none;
+}
+.sendBtn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sendBtn:disabled {
+  background: #b0b0b0;
+  cursor: not-allowed;
+}
+.loading {
+  text-align: center;
+  color: #888;
+  margin: 1rem 0;
+}
