@@ -9,7 +9,8 @@ async function push(text: string) {
       message: text,
     });
   } catch (err) {
-    // Ignore push errors
+    console.log(err)
+    // Ignore push errors 
   }
 }
 
