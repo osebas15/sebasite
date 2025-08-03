@@ -37,7 +37,7 @@ const ShareListCreator: Component = () => {
             <For each={storedListIds()}>
                 {(id) => <ListIdCell id={id}/>}
             </For>
-            <b class={contStyles.title}>Share your Todo List</b>
+            <b class={contStyles.title}>Share a Checklist</b>
             <input 
                 type="text" 
                 class={styles.textField} 

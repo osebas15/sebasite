@@ -54,7 +54,7 @@ export default function ChatAppSolid() {
 
   return (
     <div class={styles.chatApp}>
-      <div class={styles.header}>Sebastian's Resume Bot (GPT-4o)</div>
+      <div class={styles.header}>Sebastian's Resume AI (GPT-4o)</div>
       <div class={styles.messages}>
         {messages().map((msg, idx) => (
           <div class={msg.role === 'user' ? styles.userMsg : styles.assistantMsg}>
