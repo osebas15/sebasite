@@ -45,9 +45,9 @@ export default function ChatAppSolid() {
   // Scroll to bottom on new message
   createEffect(() => {
     messages();
-    setTimeout(() => {
+    queueMicrotask(() => {
       if (chatEndRef) chatEndRef.scrollIntoView({ behavior: 'smooth' });
-    }, 0);
+    });
   });
 
   onCleanup(() => {

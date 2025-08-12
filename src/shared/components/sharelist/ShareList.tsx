@@ -78,70 +78,75 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   let [showPreviousLists, setShowPreviousLists] = createSignal<boolean>(false)
   let [inputError, setInputError] = createSignal<string>('')
 
-  let subscription: RealtimeSubscription | null
+let subscription: RealtimeSubscription | null = null;
 
   createEffect(() => {
     setCurrentUrl(`${window.location.origin}${location.pathname}`);
 
-    const newTodos = upstreamTodos()
+    const newTodos = upstreamTodos();
     if (newTodos) {
-      setTodos(newTodos)
+      setTodos(newTodos);
     }
 
-    if (list_id != undefined && !storedListIds().includes(list_id)){
-      newList()
+    // Clean up previous subscription if it exists
+    if (subscription && supabase) {
+      supabase.removeSubscription(subscription);
+      subscription = null;
     }
-  })
 
-  const createSubscription = () => {
-    subscription = supabase
-    .from<Todo>(`todos:list_id=eq.${list_id}`)
-    .on('*', (payload) => {
-      switch (payload.eventType) {
-        case 'INSERT':
-          setTodos((prev) => [...prev, payload.new])
-          break
-        case 'UPDATE':
-          setTodos((item) => item.id === payload.new.id, payload.new)
-          break
-        case 'DELETE':
-          setTodos((prev) => prev.filter((item) => item.id != payload.old.id))
-          break
-      }
-    })
-    .subscribe()
-  }
+    // Subscribe to realtime updates for the current list_id
+    if (list_id && supabase) {
+      subscription = supabase
+        .from<Todo>(`todos:list_id=eq.${list_id}`)
+        .on('*', (payload) => {
+          switch (payload.eventType) {
+            case 'INSERT':
+              setTodos((prev) => [...prev, payload.new]);
+              break;
+            case 'UPDATE':
+              setTodos((item) => item.id === payload.new.id, payload.new);
+              break;
+            case 'DELETE':
+              setTodos((prev) => prev.filter((item) => item.id != payload.old.id));
+              break;
+          }
+        })
+        .subscribe();
+    }
 
+    if (list_id != undefined && !storedListIds().includes(list_id)) {
+      newList();
+    }
+  });
+
+  // No need for handleVisibilityChange to call createSubscription, as subscription is handled by createEffect
   const handleVisibilityChange = () => {
-    if (!document.hidden) {
-        createSubscription();
-    }
+    // No-op, kept for possible future use
   };
 
   onMount(() => {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         createTodo({
-            task: inputTodo(),
-            is_complete: false,
-            list_id: list_id ?? 'error'
-        })
+          task: inputTodo(),
+          is_complete: false,
+          list_id: list_id ?? 'error'
+        });
       }
-    })
+    });
 
     if (list_id != undefined) {
-      addListIds([list_id])
+      addListIds([list_id]);
     }
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    createSubscription()
-  })
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+  });
 
   onCleanup(() => {
     document.removeEventListener('visibilitychange', handleVisibilityChange);
-    if (subscription) {
-        supabase.removeSubscription(subscription);
+    if (subscription && supabase) {
+      supabase.removeSubscription(subscription);
+      subscription = null;
     }
   });
 
@@ -150,14 +155,15 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
   }
 
   async function setCompletionForTodo(id: number, isComplete: boolean) {
+    if (!supabase) return;
     const { error } = await supabase
       .from<Todo>('todos')
       .update({
         is_complete: isComplete
       })
-      .eq('id', id)
+      .eq('id', id);
     if (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
@@ -167,39 +173,49 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
       return;
     }
     setInputError('');
-    const { data, error } = await supabase.from<Todo>('todos').insert(newTodo)
+    if (!supabase) return;
+    const { data, error } = await supabase.from<Todo>('todos').insert(newTodo);
     if (error) {
-      console.error(error)
+      console.error(error);
     }
-    setInputTodo('')
+    setInputTodo('');
   }
 
   async function deleteTodo(todo: Todo) {
+    if (!supabase) return;
     const { error } = await supabase
       .from<Todo>('todos')
       .delete()
-      .eq('id', todo.id)
+      .eq('id', todo.id);
     if (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
-  async function todoActions(verb: TodoVerb, updatedTodos: Todo[]){
+  async function todoActions(verb: TodoVerb, updatedTodos: Todo[]) {
     switch (verb) {
-        case 'COMPLETE':
-            updatedTodos.forEach((todo) => setCompletionForTodo(todo.id!, true))
-            break
-        case 'UNCHECK':
-            updatedTodos.forEach((todo) => setCompletionForTodo(todo.id!, false))
-            break
-        case 'CREATE':
-            updatedTodos.forEach((todo) => createTodo(todo))
-            break
-        case 'DELETE':
-            updatedTodos.forEach((todo) => deleteTodo(todo))
-            break
-        default :
-            console.error(`unimplemented switch case ${verb}`)
+      case 'COMPLETE':
+        await Promise.all(
+          updatedTodos
+            .filter((todo) => todo.id != null)
+            .map((todo) => setCompletionForTodo(todo.id as number, true))
+        );
+        break;
+      case 'UNCHECK':
+        await Promise.all(
+          updatedTodos
+            .filter((todo) => todo.id != null)
+            .map((todo) => setCompletionForTodo(todo.id as number, false))
+        );
+        break;
+      case 'CREATE':
+        await Promise.all(updatedTodos.map((todo) => createTodo(todo)));
+        break;
+      case 'DELETE':
+        await Promise.all(updatedTodos.map((todo) => deleteTodo(todo)));
+        break;
+      default:
+        console.error(`unimplemented switch case ${verb}`);
     }
   }
 
@@ -276,7 +292,7 @@ const ShareList: Component<ShareListProps> = ({list_id}) => {
           New todo
         </button>
         {inputError() && (
-          <div style={{ color: 'red', marginTop: '8px' }}>{inputError()}</div>
+          <div style={{ color: 'red', 'margin-top': '8px' }}>{inputError()}</div>
         )}
       </div>
       <For each={orderTodos(todos)}>
