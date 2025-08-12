@@ -64,7 +64,7 @@ const record_unknown_question_json = {
 
 const send_direct_message_json = {
   name: 'send_direct_message',
-  description: 'Use this tool to send a direct message from the user as a push notification. Use if the user wants to send a message directly to Sebastian.',
+  description: 'Use this tool to send a message to the website owner as a push notification. Use if the user wants to send a message directly to the website owner.',
   parameters: {
     type: 'object',
     properties: {
