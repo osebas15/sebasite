@@ -24,6 +24,12 @@ async function record_unknown_question(question: string) {
   await push(`Recording ${question}`);
   return { recorded: 'ok' };
 }
+
+// New tool: send direct message as push notification
+async function send_direct_message(message: string, from: string = 'Anonymous') {
+  await push(`Direct message from ${from}: ${message}`);
+  return { sent: 'ok' };
+}
 import { OpenAI } from 'openai';
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import type { ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources/chat/completions';
@@ -57,13 +63,37 @@ const record_unknown_question_json = {
   },
 };
 
+const send_direct_message_json = {
+  name: 'send_direct_message',
+  description: 'Use this tool to send a direct message from the user as a push notification. Use if the user wants to send a message directly to Sebastian.',
+  parameters: {
+    type: 'object',
+    properties: {
+      message: { type: 'string', description: 'The message the user wants to send.' },
+      from: { type: 'string', description: 'The name or identifier of the sender, if provided.' },
+    },
+    required: ['message'],
+    additionalProperties: false,
+  },
+};
+
 const tools: ChatCompletionTool[] = [
   { type: 'function', function: record_user_details_json },
   { type: 'function', function: record_unknown_question_json },
+  { type: 'function', function: send_direct_message_json },
 ];
 
 function system_prompt(summary: string, linkedin: string, name: string) {
-  return `today is ${new Date().toLocaleDateString()}. You are a large language model pretending to be ${name}. You are acting as ${name} and are allowed to break the fourth wall when its appropriate for a response. If appropriate for a response you can stop acting like ${name} and take on the persona of a helpfull large language model assitant. You are answering questions on ${name}'s website, particularly questions related to ${name}'s career, background, skills and experience. Your responsibility is to represent ${name} for interactions on the website. You are given a summary of ${name}'s background and resume which you can use to answer questions. Be professional and engaging, as if talking to a potential client or future employer who came across the website. If you don't know the answer to any question, use your record_unknown_question tool to record the question that you couldn't answer, even if it's about something trivial or unrelated to career. If the user is engaging in discussion, try to steer them towards getting in touch via email; ask for their email and record it using your record_user_details tool.\n\n## Summary:\n${summary}\n\n## LinkedIn Profile:\n${linkedin}\n\nWith this context, please chat with the user, always staying in character as ${name}.`;
+  return `today is ${new Date().toLocaleDateString()}. You are a large language model pretending to be ${name}. 
+  You are acting as ${name} and are allowed to break the fourth wall when its appropriate for a response. 
+  If appropriate for a response you can stop acting like ${name} and take on the persona of a helpfull large language model assitant. 
+  You are answering questions on ${name}'s website, particularly questions related to ${name}'s career, background, skills and experience. 
+  Your responsibility is to represent ${name} for interactions on the website. You are given a summary of ${name}'s background and resume which you can use to answer questions. 
+  Be professional and engaging, as if talking to a potential client or future employer who came across the website. If you don't know the answer to any question, 
+  use your record_unknown_question tool to record the question that you couldn't answer, even if it's about something trivial or unrelated to career. 
+  If the user wants to send a message to ${name}, use the send_direct_message tool to deliver their message as a push notification.
+  If the user is engaging in discussion, try to steer them towards getting in touch via email; ask for their email and record it using your record_user_details tool.
+  \n\n## Summary:\n${summary}\n\n## LinkedIn Profile:\n${linkedin}\n\nWith this context, please chat with the user, always staying in character as ${name}.`;
 }
 
 // Optionally, you can load summary/linkedin from files or env vars
@@ -197,6 +227,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             result = await record_user_details(args.email, args.name, args.notes);
           } else if (tool_name === 'record_unknown_question') {
             result = await record_unknown_question(args.question);
+          } else if (tool_name === 'send_direct_message') {
+            result = await send_direct_message(args.message, args.from);
           }
           toolResults.push({
             role: 'tool',
