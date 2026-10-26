@@ -1,67 +1,62 @@
-Sebastian Aguirre	Contact me for my phone number | Weymouth, MA
-EMAIL: osebas15@gmail.com	WEBSITE: https://sebasite.netlify.app/
-GitHub: https://github.com/osebas15	LinkedIn: sebastian-aguirre-52ba93aa
+Sebastian Aguirre
+Full Stack & Mobile Engineer
+Boston, MA | osebas15@gmail.com | Website: https://sebasite.netlify.app/
+GitHub: https://github.com/osebas15 | LinkedIn: https://www.linkedin.com/in/sebastian-aguirre-52ba93aa/
 
-I am a results-driven Software Engineer with over 10 years of hands-on experience in designing, and developing high-performance applications across diverse tech stacks. I take pride in applying my technical expertise and continuously improving to deliver scalable solutions that align with a company’s mission and vision. Committed to lifelong learning, I experiment with technologies and concepts that pique my interest, and I’m eager to contribute to a dynamic, collaborative team. I aim to leverage my experience to support and advance the company’s strategic vision and goals.
+SUMMARY
+Full stack engineer with 10+ years of experience building iOS, web, and enterprise software for startups and Fortune 500 brands. I take a feature from idea to shipped work on my own, with a strong focus on quality: I've replatformed consumer apps used by millions of people daily, caught and fixed security issues before they reached users, and set up AI-assisted development practices (Claude, LLM coding workflows) that help teams ship faster. I communicate clearly with stakeholders, pick up new tools quickly, and choose the right solution for each client.
 
-TECHNOLOGIES USED: iOS (SwiftUI/Objective-C/Cocoapods/XCode), Javascript (React Native, Node, Typescript), C# (ASP.NET), GIT, SQL, AWS, Azure, Firebase
+TECHNICAL SKILLS
+Languages: Swift, TypeScript, JavaScript, C#, Objective-C, SQL
+Mobile: SwiftUI, SwiftData, UIKit, React Native, Capacitor.js — iOS, iPadOS, watchOS, Android
+Web / Cloud: React, Node.js, ASP.NET, AWS, Azure, Firebase
+AI: Claude skills & agentic coding workflows, LLM-assisted development, ChatGPT apps & connectors
+Tools: Git, GitHub Actions, Bitrise, Azure Pipelines, Jira
 
-PROFESSIONAL EXPERIENCE & SELECTED ACHIEVEMENTS
+EXPERIENCE
 
-Medical Sabbatical	November 2023 - July 2025Took time off for medical treatment and achieved full recovery. During this time, I focused on independent development projects across multiple stacks. My most recent project is focused on experimenting and retooling with machine learning programming tools such as GitHub Copilot, Antrophics Claude, and OpenAI ChatGPT.
-My most recent project: https://github.com/osebas15/prompt-board
-Focus for my research: https://github.com/osebas15/prompt-board/tree/main/prompts
-See it live: prompt-board.netlify.app
+TELUS Digital — Boston, MA	Sep 2025 – Oct 2026
+Full Stack Engineer — consulting for enterprise media and hospitality clients
+Wyndham Hotels & Resorts
+- Replatformed a native mobile app used by millions of people daily to React Native.
+- Built a set of Claude skills that let the team iterate on bug fixes and new features much faster.
+- Tracked down a memory leak and cut memory growth by about 40%.
+- Helped reach a 95% UAT bug closure rate ahead of a hard release deadline.
+News Corp / Dow Jones
+- Worked on a lean AI team to prototype the Dow Jones ChatGPT connector.
+- Found and fixed a critical security flaw in the MarketWatch ChatGPT app before handoff.
+McClatchy
+- Maintained a white-label news app that powers many local newspaper brands.
+- Helped set up the team's LLM-assisted coding practices, improving development speed and code quality.
 
-LogixHealth – Bedford, MA (contract)	August 2023 - November 2023
-Mobile Applications Engineer Main Focus: Piloting a mobile development business unit
-Discussed requirements and architectural needs with Platform Architect
-Defined a Jira Epic with the Project Manager for the mobile app development
-Mentored and worked with international (Indian and Polish) team members
-Created and iterated through a SwiftUI POC (iPhone and Apple Watch) to help the product owners and designers ideate features and mobile design
-Worked with IT team to recover and securely set up Apple developer and Google play accounts
-Converted an Angular web app into a capacitor.js app, repurposing the web UI for a quick Android implementation
-Planned testing for mobile applications with the Head of QA
+LogixHealth — Bedford, MA (contract)	Aug 2023 – Nov 2023
+Mobile Applications Engineer — helped launch a new mobile development business unit
+- Helped leadership set up the iOS business unit and led stakeholder meetings to define the product roadmap.
+- Quickly prototyped iPhone and Apple Watch concepts in SwiftUI so product owners and designers could explore features.
+- Converted an Angular web app into a cross-platform Capacitor.js mobile app.
+- Planned mobile QA strategy with the head of QA; recovered and secured the Apple Developer and Google Play accounts.
 
-Bento Dental – Boston, MA	June 2022 - December 2022
-Mobile Team Lead – Point of Contact Mobile App Main Focus: manage and improve critical product
-Reported directly to CTO
-Managed and worked closely with very talented Polish colleagues
-Discuss purpose and goals of mobile team and mobile app with CEO and CTO
-Identified the signup flow as a user pain point, and was the main driver in its improvement Epic
-Ensured and expanded security for the mobile app during a SOC 2 audit
-Joined strategy meetings as the mobile SME with VP of Sales 
-Received HIPAA certification and maintained compliance for the mobile app
+Bento Dental — Boston, MA	Jun 2022 – Dec 2022
+Mobile Team Lead — owned the mobile app end to end
+- Strengthened mobile app security during a SOC 2 audit and maintained HIPAA compliance.
+- Identified the signup flow as a key pain point for users and helped redesign it.
+- Optimized the Bitrise CI/CD pipeline; managed App Store and Play Store releases.
 
-QuietLogistics – Devens, MA	April 2019 - June 2022
-Software Manager & Senior Engineer Main Focus: Maintaining and expanding mission critical systems
-Developed and managed enterprise stack utilizing C#/ASP.NET and SQL
-Was shipping and logistics technology SME for logistics company
-Provided highest technical escalation resolutions for clients
-Collaborated with stakeholders to identify and implement key features
-Mentored and trained new engineers
-Migrated to and managed Git repositories
-Experienced our teams growth into an agile team
-Managed our AWS S3 client interface
-Created automated build pipeline in Azure for the iOS app and other systems
+Quiet Logistics — Devens, MA	Apr 2019 – Jun 2022
+Senior Software Engineer (promoted from Mobile Applications Developer)
+- Shipping subject-matter expert; led shipping engineering through 1M+ packages in 4 months.
+- Delivered Brexit compliance changes that recaptured $3M in revenue.
+- Helped the company get acquired by American Eagle Outfitters.
+- Became the lead engineer when the software manager left at a critical time for the business, keeping essential C#/ASP.NET and SQL systems running.
+- Built an Azure CI/CD pipeline for the iOS app and other systems; led the migration to Git; managed the AWS S3 client interface.
+- Mentored new engineers and helped the team move to agile development.
 
-NXVTech - Jamaica Plain, MA                                                	September 2017 -  February 2019 
-Software Developer Main Focus: Enabling initial app communication between drivers and the police officers who stopped them
-Designed and built the app from customer specifications
-Wrote and managed a full stack application
-Leveraged Google Firebase to host a react portal, noSQL DB and a REST API server for the mobile app
-Managed the Apple Developer account
-Implemented push notifications using firebase (sending/receiving) 
+NXVTech — Jamaica Plain, MA	Sep 2017 – Feb 2019
+Software Developer — app to ease tensions between police and communities
+- Designed and built a full stack app from customer specs: a React portal, a NoSQL database, and a REST API on Firebase, plus push notifications.
 
-Freelance Software Developer 	August 2016 - August 2017
-Main Focus: Working with non-developers to enhance their creative vision and every-day tasks by using specified apps
-Utilized AWS to create an iOS notification service
-Taught clients Git for faster feature iteration
-Worked with clients to design apps to their specifications and needs
-Developed apps using multiple platforms and technologies
+Freelance Developer	Aug 2016 – Aug 2017
+- Built apps for non-technical clients across multiple platforms, including an AWS-backed iOS notification service; taught clients Git so they could iterate on features faster.
 
-Zobreus - Cambridge, MA	September 2014 - June 2016
-Software Developer Main Focus: Bridging data between health care systems and patient health record portals
-Gained insight into the inception and growth of a startup 
-Learned Objective-C and Swift and how to interpolate between them
-Gained an understanding of sound UI design principles
+Zobreus — Cambridge, MA	Sep 2014 – Jun 2016
+- Early-stage health-tech startup connecting care providers and patients; built iOS features in Objective-C and Swift.

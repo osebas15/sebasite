@@ -1,5 +1,4 @@
 import styles from './App.module.css';
-import images from './assets/imageConstants';
 import LogoLink from './shared/components/LogoLink';
 import QRGenerator from './shared/components/QRCodeCreator';
 
@@ -62,15 +61,15 @@ const Home: Component = () => {
     <div class={styles.App}>
       <header class={styles.header}>
         <p>
-          Hi! I'm <b>Sebastian Aguirre</b>, <br/> 
-          I have <b>10+ years experience</b> engineering and managing projects across a wide variety of stacks. <br/> 
-          I'm experienced in <b>iOS, Javascript, C#, SQL, and Cloud Services</b> amongst other technologies
+          Hi! I'm <b>Sebastian Aguirre</b>, a <b>Full Stack &amp; Mobile Engineer</b> in Boston. <br/> 
+          I have <b>10+ years experience</b> shipping iOS, web, and enterprise software for startups and Fortune 500 brands. <br/> 
+          I work in <b>Swift, TypeScript, React Native, C#, SQL, and AI-assisted development</b> amongst other technologies
         </p>
         <div class={styles.socials}>
           <LogoLink text="osebas15" link={new URL("https://github.com/osebas15")} imgSrc="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"/>
           <LogoLink text="Sebastian Aguirre" link={new URL("https://www.linkedin.com/in/sebastian-aguirre-52ba93aa/")} imgSrc="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"/>
-          <LogoLink text="anothervibecoder" link={new URL("https://www.twitch.tv/anothervibecoder")} imgSrc={images.glitch_flat_purple}/>
-        </div>
+          <a href="/me/Sebastian_Aguirre_Resume_2026.pdf" target="_blank" rel="noopener noreferrer" class={styles.logolink}>Resume (PDF)</a>
+          <a href="mailto:osebas15@gmail.com" class={styles.logolink}>osebas15@gmail.com</a>        </div>
       </header>
       <HToolsContainer containers={containers()} minHeight='320px'/>
       {/*<AboutMe/>*/}
