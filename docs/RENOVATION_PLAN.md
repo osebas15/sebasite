@@ -41,7 +41,7 @@ LinkedIn URL `linkedin.com/in/sebastian-aguirre-52ba93aa` resolves and matches t
 
 ## Phase 1 — Stop the bleeding (≈1 day)
 
-**Chat (bugs 1, 6)**
+**Chat (bugs 1, 6)** — steps 2–4 are done in code. Step 1 (credits + budget cap) is manual. Netlify-level rate limiting is still a follow-up; the in-function limiter is best effort per warm instance.
 
 1. Restore the API: add OpenAI credits **and** set a monthly project budget/hard limit in the OpenAI dashboard, or move to a cheaper provider/model. Rotate the key if you suspect abuse.
 2. Harden `netlify/functions/chat.ts`:

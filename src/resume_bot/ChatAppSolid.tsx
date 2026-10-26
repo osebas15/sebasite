@@ -4,7 +4,10 @@ import styles from './ChatAppSolid.module.css';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  error?: boolean;
 }
+
+const CONTACT_EMAIL = 'osebas15@gmail.com';
 
 export default function ChatAppSolid() {
   const [messages, setMessages] = createSignal<Message[]>([]);
@@ -19,17 +22,26 @@ export default function ChatAppSolid() {
     setInput('');
     setLoading(true);
     try {
-      const history: Message[] = [...messages(), userMsg];
+      const history = messages()
+        .filter(m => !m.error)
+        .map(({ role, content }) => ({ role, content }));
       const res = await fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history })
       });
-      const data = await res.json();
-      const assistantMsg: Message = { role: 'assistant', content: data.content || 'No response.' };
-      setMessages([...messages(), assistantMsg]);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.content) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      setMessages([...messages(), { role: 'assistant', content: data.content }]);
     } catch (err) {
-      setMessages([...messages(), { role: 'assistant', content: 'Error: Unable to get response.' }]);
+      const reason = err instanceof Error && !err.message.startsWith('HTTP') ? `${err.message} ` : '';
+      setMessages([...messages(), {
+        role: 'assistant',
+        content: `${reason}You can always reach me directly at ${CONTACT_EMAIL}.`,
+        error: true
+      }]);
     } finally {
       setLoading(false);
     }

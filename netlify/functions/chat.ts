@@ -83,7 +83,7 @@ const tools: ChatCompletionTool[] = [
   { type: 'function', function: send_direct_message_json },
 ];
 
-function system_prompt(summary: string, linkedin: string, name: string) {
+function system_prompt(summary: string, resume: string, name: string) {
   return `today is ${new Date().toLocaleDateString()}. You are a large language model pretending to be ${name}. 
   You are acting as ${name} and are allowed to break the fourth wall when its appropriate for a response. 
   If appropriate for a response you can stop acting like ${name} and take on the persona of a helpfull large language model assitant. 
@@ -93,7 +93,7 @@ function system_prompt(summary: string, linkedin: string, name: string) {
   use your record_unknown_question tool to record the question that you couldn't answer, even if it's about something trivial or unrelated to career. 
   If the user wants to send a message to ${name}, use the send_direct_message tool to deliver their message as a push notification.
   If the user is engaging in discussion, try to steer them towards getting in touch via email; ask for their email and record it using your record_user_details tool.
-  \n\n## Summary:\n${summary}\n\n## LinkedIn Profile:\n${linkedin}\n\nWith this context, please chat with the user, always staying in character as ${name}.`;
+  \n\n## Summary:\n${summary}\n\n## Resume:\n${resume}\n\nWith this context, please chat with the user, always staying in character as ${name}.`;
 }
 
 const summary = `
@@ -175,20 +175,90 @@ Zobreus — Cambridge, MA	Sep 2014 – Jun 2016
 `;
 const name = 'Sebastian Aguirre';
 
+const MAX_BODY_BYTES = 32_000;
+const MAX_MESSAGES = 12;
+const MAX_MESSAGE_CHARS = 2_000;
+const MAX_TOOL_ROUNDS = 3;
+const MAX_COMPLETION_TOKENS = 500;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 15;
+
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://sebasite.netlify.app')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+function isAllowedOrigin(origin: string | undefined): boolean {
+  if (!origin) return false;
+  if (allowedOrigins.includes(origin)) return true;
+  // Netlify deploy previews and local dev
+  return /^https:\/\/[a-z0-9-]+--sebasite\.netlify\.app$/.test(origin)
+    || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+}
+
+// Best effort only: state lives per warm function instance. The OpenAI budget cap is the real limit.
+const requestLog = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const recent = (requestLog.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  recent.push(now);
+  requestLog.set(ip, recent);
+  return recent.length > RATE_LIMIT_MAX_REQUESTS;
+}
+
+function sanitizeMessages(raw: unknown): ChatCompletionMessageParam[] | null {
+  if (!Array.isArray(raw)) return null;
+  const cleaned = raw
+    .filter((m): m is { role: 'user' | 'assistant'; content: string } =>
+      !!m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim() !== '')
+    .slice(-MAX_MESSAGES)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_CHARS) }));
+  if (cleaned.length === 0 || cleaned[cleaned.length - 1].role !== 'user') return null;
+  return cleaned;
+}
+
+function json(statusCode: number, body: object): APIGatewayProxyResult {
+  return {
+    statusCode,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  };
+}
+
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: 'Method Not Allowed',
-    };
+    return json(405, { error: 'Method not allowed' });
   }
 
-  const { messages } = JSON.parse(event.body || '{}');
+  if (!isAllowedOrigin(event.headers.origin || event.headers.Origin)) {
+    return json(403, { error: 'Forbidden' });
+  }
+
+  const ip = event.headers['x-nf-client-connection-ip'] || event.headers['x-forwarded-for'] || 'unknown';
+  if (isRateLimited(ip)) {
+    return json(429, { error: 'Too many messages. Please wait a minute and try again.' });
+  }
+
+  if ((event.body || '').length > MAX_BODY_BYTES) {
+    return json(413, { error: 'Conversation is too long. Please refresh and start a new one.' });
+  }
+
+  let body: any;
+  try {
+    body = JSON.parse(event.body || '{}');
+  } catch {
+    return json(400, { error: 'Invalid JSON' });
+  }
+
+  const messages = sanitizeMessages(body?.messages);
   if (!messages) {
-    return {
-      statusCode: 400,
-      body: 'Missing messages',
-    };
+    return json(400, { error: 'Missing or invalid messages' });
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OPENAI_API_KEY is not set');
+    return json(503, { error: 'The AI assistant is unavailable right now.' });
   }
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -199,22 +269,32 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   ];
 
   try {
-    let done = false;
     let response: any;
-    while (!done) {
+    for (let round = 0; ; round++) {
       response = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: chatMessages,
-        tools,
+        max_tokens: MAX_COMPLETION_TOKENS,
+        // On the last allowed round, force a plain text answer.
+        ...(round < MAX_TOOL_ROUNDS ? { tools } : {}),
       });
       const choice = response.choices[0];
-      if (choice.finish_reason === 'tool_calls' && choice.message.tool_calls) {
-        // Handle tool calls
+      if (round < MAX_TOOL_ROUNDS && choice.finish_reason === 'tool_calls' && choice.message.tool_calls) {
         const tool_calls = choice.message.tool_calls;
         const toolResults: ChatCompletionMessageParam[] = [];
         for (const tool_call of tool_calls) {
           const tool_name = tool_call.function.name;
-          const args = JSON.parse(tool_call.function.arguments);
+          let args: any;
+          try {
+            args = JSON.parse(tool_call.function.arguments);
+          } catch {
+            toolResults.push({
+              role: 'tool',
+              content: JSON.stringify({ error: 'invalid arguments' }),
+              tool_call_id: tool_call.id,
+            } as ChatCompletionMessageParam);
+            continue;
+          }
           let result = {};
           if (tool_name === 'record_user_details') {
             result = await record_user_details(args.email, args.name, args.notes);
@@ -234,17 +314,13 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         chatMessages.push(...toolResults);
         // Continue the loop to let the model respond to the tool results
       } else {
-        done = true;
+        break;
       }
     }
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ content: response.choices[0].message.content }),
-    };
+    return json(200, { content: response.choices[0].message.content });
   } catch (err: any) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
-    };
+    console.error('Chat completion failed:', err?.status, err?.message);
+    const providerUnavailable = [401, 403, 429].includes(err?.status);
+    return json(providerUnavailable ? 503 : 500, { error: 'The AI assistant is unavailable right now.' });
   }
 };
