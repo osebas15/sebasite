@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .bg { fill: #F6F3EC; }
+    .mark { stroke: #4B8A3E; fill: #4B8A3E; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #121412; }
+      .mark { stroke: #7BC46A; fill: #7BC46A; }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="14"/>
+  <g transform="rotate(-4 32 32)">
+    <rect class="mark" x="8" y="12" width="48" height="40" rx="6" fill="none" stroke-width="4" stroke-dasharray="6 3"/>
+    <text class="mark" x="32" y="41.5" text-anchor="middle" font-family="Arial Black, Helvetica, sans-serif" font-weight="900" font-size="24" stroke="none">SA</text>
+  </g>
+</svg>

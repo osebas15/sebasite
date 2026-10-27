@@ -1,18 +1,34 @@
-.urlText {
-    font-size: 0.75em;
-    font-style: italic;
-}
-
 .copyToClipboard {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
     width: 100%;
+    padding: 12px;
+    background: var(--paper-2);
+    border: 1px dashed var(--rule);
+    border-radius: var(--radius-sm);
+}
+
+.copyToClipboard button {
+    min-width: 44px;
+    min-height: 44px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
 }
 
 .VStack {
     display: flex;
-    margin-top: -2px;
-    margin-right: 10px;
+    flex: 1;
+    min-width: 0;
     flex-direction: column;
-    align-items: flex-start;
+    font-size: 0.875rem;
+}
+
+.urlText {
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    color: var(--ink-muted);
+    overflow-wrap: anywhere;
 }

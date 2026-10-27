@@ -19,9 +19,9 @@ interface ListIdCellProps {
 
 const ListIdCell: Component<ListIdCellProps> = ({id}) => {
     const navigate = useNavigate()
+    const name = listIdToName(id) || id
 
     const deleteClicked = () => {
-        console.log("deleting")
         deleteIds([id])
     }
 
@@ -31,10 +31,10 @@ const ListIdCell: Component<ListIdCellProps> = ({id}) => {
 
     return(
         <div class={styles.listIdCell}>
-            <button onClick={deleteClicked}>
-                X
+            <button type="button" class={styles.name} onClick={navigateToList}>{name}</button>
+            <button type="button" class={styles.remove} onClick={deleteClicked} aria-label={`Forget list ${name}`}>
+                ×
             </button>
-            <b class={styles.name} onClick={navigateToList}>{listIdToName(id) || id}</b>
         </div>
     )
 }

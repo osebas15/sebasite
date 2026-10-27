@@ -2,7 +2,8 @@ import {
     Component,
     createSignal,
     onMount,
-    For
+    For,
+    Show
 } from 'solid-js'
 
 import {
@@ -15,14 +16,14 @@ import { addListIds, storedListIds } from '../../backend/listids';
 import { createShortUUID } from '../utils/crypto';
 
 import styles from './ShareListCreator.module.css';
-import contStyles from "./HToolsContainer.module.css"
 
 const ShareListCreator: Component = () => {
     const [listName, setListName] = createSignal("")
     const [listUUID, setListUUID] = createSignal("")
 
     const navigate = useNavigate()
-    const handleClick = () => {
+    const handleSubmit = (e: SubmitEvent) => {
+        e.preventDefault()
         let listId = `${listUUID()}-${listName()}`
         addListIds([listId])
         navigate(`/sharelist/${listId}`)
@@ -33,22 +34,31 @@ const ShareListCreator: Component = () => {
     })
 
     return (
-        <a class={styles.mainContainer}>
-            <For each={storedListIds()}>
-                {(id) => <ListIdCell id={id}/>}
-            </For>
-            <b class={contStyles.title}>Share a Checklist</b>
-            <input 
-                type="text" 
-                class={styles.textField} 
-                placeholder="name for your list" 
-                value={listName()} 
-                onInput={(e) => setListName(e.currentTarget.value)} 
-            />
-            <button type="button" class={styles.centeredButton} onClick={handleClick}>
-                create list
-            </button>
-        </a>
+        <div class={styles.mainContainer}>
+            <p class={styles.intro}>Make a checklist anyone with the link can edit in real time.</p>
+            <form class={styles.form} onSubmit={handleSubmit}>
+                <label class="visually-hidden" for="list-name">List name</label>
+                <input 
+                    id="list-name"
+                    type="text" 
+                    class={styles.textField} 
+                    placeholder="Name your list" 
+                    value={listName()} 
+                    onInput={(e) => setListName(e.currentTarget.value)} 
+                />
+                <button type="submit" class="btn btn-primary">
+                    Create list
+                </button>
+            </form>
+            <Show when={storedListIds().length > 0}>
+                <span class="label">Your lists</span>
+                <ul class={styles.savedLists}>
+                    <For each={storedListIds()}>
+                        {(id) => <li><ListIdCell id={id}/></li>}
+                    </For>
+                </ul>
+            </Show>
+        </div>
     )
 }
 

@@ -28,7 +28,7 @@ const svgUnchecked = () => (
         width="24"
         height="24"
         fill="none"
-        stroke="black"
+        stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -43,8 +43,8 @@ const svgChecked = () => (
         viewBox="0 0 24 24"
         width="24"
         height="24"
-        fill="aquamarine"
-        stroke="black"
+        fill="var(--signal)"
+        stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -106,7 +106,9 @@ const TodoCell: Component<TodoCellProps> = ({todo, action}) => {
         <div class={style.main}>
             <div class={style.button_container}>
                 <button 
-                    class={style.checkcircle} 
+                    class={style.checkcircle}
+                    type="button"
+                    aria-label={todo.is_complete ? `${todo.task} (done, double click to uncheck)` : `Mark ${todo.task} done`}
                     onClick={handleClick}
                     onDblClick={handleDoubleClick}
                 >
@@ -124,7 +126,7 @@ const TodoCell: Component<TodoCellProps> = ({todo, action}) => {
                     </p>
                 }
             </div>
-            <b class={style.task}>{todo.task}</b>
+            <span class={style.task} classList={{ [style.done]: todo.is_complete }}>{todo.task}</span>
         </div>
     )
 }

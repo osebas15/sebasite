@@ -1,7 +1,37 @@
-.name {
-    margin-left: 20px;
+.listIdCell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid var(--rule);
 }
 
-.listIdCell {
-    margin-bottom: 20px;
+.name,
+.remove {
+    min-height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.name {
+    flex: 1;
+    text-align: left;
+    padding: 0;
+    color: var(--signal-ink);
+    font-weight: 600;
+}
+
+.name:hover {
+    text-decoration: underline;
+}
+
+.remove {
+    min-width: 44px;
+    font-size: 1.25rem;
+    color: var(--ink-muted);
+}
+
+.remove:hover {
+    color: var(--danger);
 }
