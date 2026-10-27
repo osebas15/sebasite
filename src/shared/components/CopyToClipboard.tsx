@@ -15,7 +15,8 @@ const new_clipboard_svg = (
         viewBox="0 0 24 24"
         width="24"
         height="24"
-        fill="blue"
+        fill="currentColor"
+        aria-hidden="true"
     >
         <path d="M16 2H8c-1.1 0-2 .9-2 2v1H5c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-1V4c0-1.1-.9-2-2-2zm0 3v1H8V5h8zm3 15H5V7h14v13z"/>
     </svg>
@@ -27,7 +28,8 @@ const copied_clipboard_svg = (
         viewBox="0 0 24 24"
         width="24"
         height="24"
-        fill="gray"
+        fill="var(--signal)"
+        aria-hidden="true"
     >
         <path d="M16 2H8c-1.1 0-2 .9-2 2v1H5c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-1V4c0-1.1-.9-2-2-2zm0 3v1H8V5h8zm3 15H5V7h14v13z"/>
     </svg>
@@ -50,10 +52,10 @@ const CopyToClipboard: Component<CopyToClipboardProps> = ({text}) => {
     return (
         <div class={styles.copyToClipboard}>
             <div class={styles.VStack}>
-                <a>Share this link to share your list!</a>
-                <a class={styles.urlText}>{text()}</a>
+                <span>Share this link to share your list</span>
+                <span class={styles.urlText}>{text()}</span>
             </div>
-            <button onClick={copyUrl}>
+            <button type="button" onClick={copyUrl} aria-label={copied() ? 'Link copied' : 'Copy link'}>
                 {copied() ? copied_clipboard_svg : new_clipboard_svg}
             </button>
         </div>

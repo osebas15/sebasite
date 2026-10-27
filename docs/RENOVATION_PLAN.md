@@ -74,6 +74,8 @@ If you keep it (Option A), also:
 
 ## Phase 3 — Renovation (≈3–5 days, see `docs/STYLE_GUIDE.md`)
 
+Status: steps 1–5 and 7 are built, as is most of step 6 (self-hosted icons, SVG favicon, OG text tags, JSON-LD). Still open: OG image, `robots.txt`, `sitemap.xml`. Profile data now lives in `src/content/profile.ts`, which both the page and the chat function use. `public/me/*.txt` and `src/resume_bot/app.ts` are now unused and can be deleted in Phase 2.
+
 1. Add design tokens and fonts to `src/index.css`; remove the old slate/aquamarine styles.
 2. Build primitives: `Label`, `Chip`, `Button`, `Card`, `Stamp`, `Parcel`.
 3. Rebuild `Home.tsx` as the single-page layout: hero label → proof stamps → recent work → route timeline → skills → lab → off the clock → footer.

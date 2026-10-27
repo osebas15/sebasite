@@ -1,4 +1,5 @@
-import { createSignal, onCleanup, createEffect } from 'solid-js';
+import { createSignal, createEffect, For, Show, JSX } from 'solid-js';
+import { profile } from '../content/profile';
 import styles from './ChatAppSolid.module.css';
 
 interface Message {
@@ -7,17 +8,44 @@ interface Message {
   error?: boolean;
 }
 
-const CONTACT_EMAIL = 'osebas15@gmail.com';
+const SUGGESTIONS = [
+  'What did you do at Wyndham?',
+  "What's your AI workflow?",
+  'How do I contact you?',
+];
+
+const LINK_PATTERN = /\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)|(https?:\/\/[^\s)]+)|([\w.+-]+@[\w-]+\.[\w.-]+)/g;
+
+/** Turns markdown links, bare URLs, and emails into anchors; everything else stays text. */
+function linkify(text: string): JSX.Element[] {
+  const parts: JSX.Element[] = [];
+  let last = 0;
+  for (const match of text.matchAll(LINK_PATTERN)) {
+    const index = match.index ?? 0;
+    if (index > last) parts.push(text.slice(last, index));
+    const [whole, mdText, mdHref, url, email] = match;
+    const href = mdHref ?? url ?? `mailto:${email}`;
+    const external = href.startsWith('http');
+    parts.push(
+      <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
+        {mdText ?? url ?? email ?? whole}
+      </a>,
+    );
+    last = index + whole.length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
 
 export default function ChatAppSolid() {
   const [messages, setMessages] = createSignal<Message[]>([]);
   const [input, setInput] = createSignal('');
   const [loading, setLoading] = createSignal(false);
-  let chatEndRef: HTMLDivElement | undefined;
+  let logRef: HTMLDivElement | undefined;
 
-  const sendMessage = async () => {
-    if (!input().trim()) return;
-    const userMsg: Message = { role: 'user', content: input() };
+  const sendMessage = async (text = input()) => {
+    if (!text.trim() || loading()) return;
+    const userMsg: Message = { role: 'user', content: text.trim() };
     setMessages([...messages(), userMsg]);
     setInput('');
     setLoading(true);
@@ -39,7 +67,7 @@ export default function ChatAppSolid() {
       const reason = err instanceof Error && !err.message.startsWith('HTTP') ? `${err.message} ` : '';
       setMessages([...messages(), {
         role: 'assistant',
-        content: `${reason}You can always reach me directly at ${CONTACT_EMAIL}.`,
+        content: `${reason}You can always reach me directly at ${profile.email}.`,
         error: true
       }]);
     } finally {
@@ -54,44 +82,79 @@ export default function ChatAppSolid() {
     }
   };
 
-  // Scroll to bottom on new message
   createEffect(() => {
     messages();
+    loading();
     queueMicrotask(() => {
-      if (chatEndRef) chatEndRef.scrollIntoView({ behavior: 'smooth' });
+      if (logRef) logRef.scrollTo({ top: logRef.scrollHeight, behavior: 'smooth' });
     });
-  });
-
-  onCleanup(() => {
-    document.removeEventListener('keydown', handleKeyDown);
   });
 
   return (
     <div class={styles.chatApp}>
-      <div class={styles.header}>Ask my resume (AI)</div>
-      <div class={styles.messages}>
-        {messages().map((msg, idx) => (
-          <div class={msg.role === 'user' ? styles.userMsg : styles.assistantMsg}>
-            {msg.content}
+      <div
+        class={styles.messages}
+        ref={el => (logRef = el)}
+        role="log"
+        aria-live="polite"
+        aria-label="Conversation"
+      >
+        <Show when={messages().length === 0}>
+          <p class={styles.empty}>
+            Hi, I'm an AI trained on Sebastian's resume. Ask me about his experience, skills, or how to get in touch.
+          </p>
+        </Show>
+        <For each={messages()}>
+          {(msg) => (
+            <div
+              class={msg.role === 'user' ? styles.userMsg : styles.assistantMsg}
+              classList={{ [styles.errorMsg]: !!msg.error }}
+            >
+              <span class="visually-hidden">{msg.role === 'user' ? 'You:' : 'Assistant:'}</span>
+              {msg.role === 'assistant' ? linkify(msg.content) : msg.content}
+            </div>
+          )}
+        </For>
+        <Show when={loading()}>
+          <div class={styles.loading} aria-label="Assistant is typing">
+            <span>·</span><span>·</span><span>·</span>
           </div>
-        ))}
-        {loading() && <div class={styles.loading}>...</div>}
-        <div ref={el => (chatEndRef = el)} />
+        </Show>
       </div>
-      <div class={styles.inputRow}>
+      <Show when={messages().length === 0}>
+        <div class={styles.suggestions}>
+          <For each={SUGGESTIONS}>
+            {(s) => (
+              <button type="button" class={styles.suggestion} onClick={() => sendMessage(s)}>
+                {s}
+              </button>
+            )}
+          </For>
+        </div>
+      </Show>
+      <form
+        class={styles.inputRow}
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
+      >
+        <label for="chat-input" class="visually-hidden">Your message</label>
         <textarea
+          id="chat-input"
           class={styles.input}
           value={input()}
           onInput={e => setInput(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message..."
+          placeholder="Ask about my experience…"
           disabled={loading()}
           rows={2}
+          maxLength={2000}
         />
-        <button class={styles.sendBtn} onClick={sendMessage} disabled={loading() || !input().trim()}>
+        <button type="submit" class="btn btn-primary" disabled={loading() || !input().trim()}>
           Send
         </button>
-      </div>
+      </form>
     </div>
   );
 }

@@ -1,24 +1,21 @@
 .QRCodeCreator {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-}
-
-.QRCodeCreator h1 {
-    font-size: small
 }
 
 .QRCodeWrapper {
-    display: inline-block; /* Ensures the container only wraps the image */
-    border: 2px solid black; /* Change color and size as needed */
-    border-radius: 8px; /* Optional: Rounded corners */
-    padding: 10px; /* Optional: Adds space between the image and the border */
-    background-color: white; /* Optional: Background for better visibility */
-    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: 16px;
 }
 
 .QRCodeWrapper img {
-    display: block; /* Prevents extra space caused by inline images */
-    max-width: 100%; /* Ensures image stays responsive */
-    height: auto; /* Maintain aspect ratio */
+    width: 200px;
+    height: 200px;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-sm);
 }

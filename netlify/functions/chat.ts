@@ -31,6 +31,7 @@ async function send_direct_message(message: string, from: string = 'Anonymous') 
   return { sent: 'ok' };
 }
 import { OpenAI } from 'openai';
+import { profile, resumeAsText, summaryAsText } from '../../src/content/profile';
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import type { ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources/chat/completions';
 
@@ -96,84 +97,9 @@ function system_prompt(summary: string, resume: string, name: string) {
   \n\n## Summary:\n${summary}\n\n## Resume:\n${resume}\n\nWith this context, please chat with the user, always staying in character as ${name}.`;
 }
 
-const summary = `
-My name is Sebastian Aguirre. I'm a full stack and mobile engineer based in Boston, MA. I've also lived in Montgomery County, Maryland, and Medellín, Colombia.
-As an engineer, I will learn and use any tools at my disposal to solve problems for my employer, client, or myself.
-I have strong soft skills, and can communicate technical concepts and ideas effectively with CTOs, salespeople, and junior engineers.
-Most recently I consulted at TELUS Digital for Wyndham Hotels & Resorts, News Corp / Dow Jones, and McClatchy: replatforming a mobile app used by millions of people daily to React Native, prototyping the Dow Jones ChatGPT connector, and setting up AI-assisted (Claude / LLM) development practices.
-An achievement I'm proud of is stepping up as lead engineer and the shipping integrations engineer during COVID, Brexit, and peak shipping season. That helped Quiet Logistics get acquired by American Eagle Outfitters.
-I have worn many hats during my career: I've worked mobile, front-end, back-end, full stack, and dev-ops as required.
-I'm an amateur chef. I enjoy sautéing cherry tomatoes with soy sauce and oregano, and slow cooking a pot roast and using that meat and broth for many delicious meals.
-I like to play video games. If you want a good game for an engineer, try Factorio.
-I've recently started swimming a lot.
-My family is from Medellín, Colombia.
-`;
-
-const resume = `
-Sebastian Aguirre
-Full Stack & Mobile Engineer
-Boston, MA | osebas15@gmail.com | Website: https://sebasite.netlify.app/
-GitHub: https://github.com/osebas15 | LinkedIn: https://www.linkedin.com/in/sebastian-aguirre-52ba93aa/
-
-SUMMARY
-Full stack engineer with 10+ years of experience building iOS, web, and enterprise software for startups and Fortune 500 brands. I take a feature from idea to shipped work on my own, with a strong focus on quality: I've replatformed consumer apps used by millions of people daily, caught and fixed security issues before they reached users, and set up AI-assisted development practices (Claude, LLM coding workflows) that help teams ship faster. I communicate clearly with stakeholders, pick up new tools quickly, and choose the right solution for each client.
-
-TECHNICAL SKILLS
-Languages: Swift, TypeScript, JavaScript, C#, Objective-C, SQL
-Mobile: SwiftUI, SwiftData, UIKit, React Native, Capacitor.js — iOS, iPadOS, watchOS, Android
-Web / Cloud: React, Node.js, ASP.NET, AWS, Azure, Firebase
-AI: Claude skills & agentic coding workflows, LLM-assisted development, ChatGPT apps & connectors
-Tools: Git, GitHub Actions, Bitrise, Azure Pipelines, Jira
-
-EXPERIENCE
-
-TELUS Digital — Boston, MA	Sep 2025 – Oct 2026
-Full Stack Engineer — consulting for enterprise media and hospitality clients
-Wyndham Hotels & Resorts
-- Replatformed a native mobile app used by millions of people daily to React Native.
-- Built a set of Claude skills that let the team iterate on bug fixes and new features much faster.
-- Tracked down a memory leak and cut memory growth by about 40%.
-- Helped reach a 95% UAT bug closure rate ahead of a hard release deadline.
-News Corp / Dow Jones
-- Worked on a lean AI team to prototype the Dow Jones ChatGPT connector.
-- Found and fixed a critical security flaw in the MarketWatch ChatGPT app before handoff.
-McClatchy
-- Maintained a white-label news app that powers many local newspaper brands.
-- Helped set up the team's LLM-assisted coding practices, improving development speed and code quality.
-
-LogixHealth — Bedford, MA (contract)	Aug 2023 – Nov 2023
-Mobile Applications Engineer — helped launch a new mobile development business unit
-- Helped leadership set up the iOS business unit and led stakeholder meetings to define the product roadmap.
-- Quickly prototyped iPhone and Apple Watch concepts in SwiftUI so product owners and designers could explore features.
-- Converted an Angular web app into a cross-platform Capacitor.js mobile app.
-- Planned mobile QA strategy with the head of QA; recovered and secured the Apple Developer and Google Play accounts.
-
-Bento Dental — Boston, MA	Jun 2022 – Dec 2022
-Mobile Team Lead — owned the mobile app end to end
-- Strengthened mobile app security during a SOC 2 audit and maintained HIPAA compliance.
-- Identified the signup flow as a key pain point for users and helped redesign it.
-- Optimized the Bitrise CI/CD pipeline; managed App Store and Play Store releases.
-
-Quiet Logistics — Devens, MA	Apr 2019 – Jun 2022
-Senior Software Engineer (promoted from Mobile Applications Developer)
-- Shipping subject-matter expert; led shipping engineering through 1M+ packages in 4 months.
-- Delivered Brexit compliance changes that recaptured $3M in revenue.
-- Helped the company get acquired by American Eagle Outfitters.
-- Became the lead engineer when the software manager left at a critical time for the business, keeping essential C#/ASP.NET and SQL systems running.
-- Built an Azure CI/CD pipeline for the iOS app and other systems; led the migration to Git; managed the AWS S3 client interface.
-- Mentored new engineers and helped the team move to agile development.
-
-NXVTech — Jamaica Plain, MA	Sep 2017 – Feb 2019
-Software Developer — app to ease tensions between police and communities
-- Designed and built a full stack app from customer specs: a React portal, a NoSQL database, and a REST API on Firebase, plus push notifications.
-
-Freelance Developer	Aug 2016 – Aug 2017
-- Built apps for non-technical clients across multiple platforms, including an AWS-backed iOS notification service; taught clients Git so they could iterate on features faster.
-
-Zobreus — Cambridge, MA	Sep 2014 – Jun 2016
-- Early-stage health-tech startup connecting care providers and patients; built iOS features in Objective-C and Swift.
-`;
-const name = 'Sebastian Aguirre';
+const summary = summaryAsText();
+const resume = resumeAsText();
+const name = profile.name;
 
 const MAX_BODY_BYTES = 32_000;
 const MAX_MESSAGES = 12;

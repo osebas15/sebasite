@@ -21,7 +21,6 @@ import styles from './ShareList.module.css'
 import { Todo, TodoCell, TodoVerb } from './TodoCell';
 import ListIdCell from './ListIdCell'
 import CopyToClipboard from '../CopyToClipboard';
-import contStyles from "../HToolsContainer.module.css"
 import { storedListIds, addListIds, listIdToName } from '../../../backend/listids';
 
 interface ShareListProps {
@@ -125,16 +124,6 @@ let subscription: RealtimeSubscription | null = null;
   };
 
   onMount(() => {
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        createTodo({
-          task: inputTodo(),
-          is_complete: false,
-          list_id: list_id ?? 'error'
-        });
-      }
-    });
-
     if (list_id != undefined) {
       addListIds([list_id]);
     }
@@ -247,54 +236,69 @@ let subscription: RealtimeSubscription | null = null;
   return (
     <div class={styles.main}>
       <div class={styles.header}>
-        <b class={contStyles.title}>
+        <h4 class={styles.title}>
           {shareListUrlToListName(currentUrl())}
-        </b>
-        <div class={styles.burgerIcon} onClick={() => setMenuOpen(!menuOpen())}>
+        </h4>
+        <button
+          type="button"
+          class={styles.burgerIcon}
+          onClick={() => setMenuOpen(!menuOpen())}
+          aria-expanded={menuOpen()}
+          aria-controls="sharelist-menu"
+          aria-label="List options"
+        >
           &#9776;
-        </div>
-      </div>
-      <div class={styles.overlayMenuContainer}>
+        </button>
         {menuOpen() && (
-          <div class={styles.overlayMenu}>
+          <div class={styles.overlayMenu} id="sharelist-menu">
             <ul>
-              <li onClick={newList}>New list</li>
-              <li onClick={resetList}>Reset list</li>
-              <li onClick={deleteComplete}>Remove completed todos</li>
-              <li onClick={showListIdsPressed}>{showPreviousLists() ? "Hide saved lists" : "Show saved lists"}</li>
+              <li><button type="button" onClick={newList}>New list</button></li>
+              <li><button type="button" onClick={resetList}>Reset list</button></li>
+              <li><button type="button" onClick={deleteComplete}>Remove completed todos</button></li>
+              <li><button type="button" onClick={showListIdsPressed}>{showPreviousLists() ? "Hide saved lists" : "Show saved lists"}</button></li>
             </ul>
           </div>
         )}
       </div>
-      <div class={styles.vstack}>
-        {showPreviousLists() && (
+      {showPreviousLists() && (
+        <div class={styles.vstack}>
           <For each={storedListIds()}>
             {(id) => <ListIdCell id={id}/>}
           </For>
-        )}
-      </div>
+        </div>
+      )}
       <CopyToClipboard text={currentUrl}/> 
-      <div class={styles.inputContainer}>
+      <form
+        class={styles.inputContainer}
+        onSubmit={(e) => {
+          e.preventDefault();
+          todoActions('CREATE', [{
+            task: inputTodo(),
+            is_complete: false,
+            list_id: list_id ?? 'error'
+          }]);
+        }}
+      >
+        <label class="visually-hidden" for="todo-input">New todo</label>
         <input
+          id="todo-input"
           type="text"
           name="todo"
+          placeholder="Add an item"
           value={inputTodo()}
+          aria-describedby={inputError() ? 'todo-error' : undefined}
           onInput={(e) => {
             setInputTodo(e.target.value);
             if (inputError() && e.target.value.length > 3) setInputError('');
           }}
         />
-        <button onClick={() => todoActions('CREATE', [{
-          task: inputTodo(),
-          is_complete: false,
-          list_id: list_id ?? 'error'
-        }])}>
-          New todo
+        <button type="submit" class="btn btn-primary">
+          Add
         </button>
         {inputError() && (
-          <div style={{ color: 'red', 'margin-top': '8px' }}>{inputError()}</div>
+          <p id="todo-error" class={styles.error}>{inputError()}</p>
         )}
-      </div>
+      </form>
       <For each={orderTodos(todos)}>
         {(todo) => <TodoCell todo={todo} action={todoActions}/>}
       </For>
